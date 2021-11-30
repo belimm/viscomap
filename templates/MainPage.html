@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block Title %}
+    ViscoMap
+{% endblock %}
+
+{% block Search %}
+    <div class = "wrapper">
+        <div class="search-input" method = "POST">
+            <input type="text" placeholder="Write URL">
+            <button class = "buttonIcon"><img src="static/searchIcon.png"/></button>
+            <div class = "autocom-box"></div>
+        </div>
+    </div> 
+{% endblock %}

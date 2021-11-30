@@ -1,0 +1,197 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+nav{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 10vh;
+    background: #000000;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 0px 0px 20px 20px;
+}
+.logo img {
+    width: 120px;
+    height: auto;
+}
+.nav-links{
+    display: flex;
+    justify-content: space-around;
+    width: 35%;
+}
+.nav-links li{
+    list-style: none;
+}
+.burger{
+    display: none;
+    cursor: pointer;
+}
+.burger div{
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 5px;
+}
+.nav-links a{
+    text-decoration: none;
+    letter-spacing: 3px;
+    color: white;
+    font-weight: bold;
+}
+
+@media screen and (max-width: 1024px){
+    .nav-links{
+        width: 60%;
+    }
+}
+    
+@media screen and (max-width: 768px){
+    body{
+        overflow-x: hidden;
+    }
+   .nav-links{
+       transform: translateX(100%);
+       position: absolute;
+        right: 0px;
+        height: 92vh;
+        top: 8vh;
+        width: 20%;
+        border-radius: 0px 0px 0px 20px;
+        background-color: #000000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: transform 0.5s ease-in-out;
+    }
+    .nav-links li{
+        opacity: 0;
+    }
+    .burger{
+        display: block;
+    }
+    
+}
+    
+.nav-active{
+    transform: translateX(0%);
+}
+
+@keyframes navLinkFade{
+    from{
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to{
+        opacity: 1;
+        transform: translateX(0px);
+    }
+}
+
+.toggle .line1{
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+.toggle .line2{
+    opacity: 0;
+}
+.toggle .line3{
+    transform: rotate(45deg) translate(-5px, -6px);
+}
+
+.wrapper{
+    position: absolute;
+    width: 400px;
+    height: 200px;
+    top: 40%;
+    left: 45%;
+    right: 20%;
+    margin: -100px 0 0 -150px;
+}
+
+.wapper .search-input{
+    position: relative;
+    background: white;
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: 0px 1px 5px 3px rgba(0,0,0,0.12);
+}
+
+.search-input input{
+    height: 55px;
+    width: 100%;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    padding: 0px 60px 0 20px;
+    font-size: 18px;
+    box-shadow: hsl(177, 87%, 21%) 0px 5px 15px;
+}
+
+.search-input input::placeholder{
+    color: hsl(177, 87%, 21%);
+}
+
+.search-input .buttonIcon{
+    height: 55px;
+    width: 55px;
+    line-height: 55px;
+    padding: 5px;
+    position: absolute;
+    color: hsl(177, 87%, 21%);
+    border-radius: 0px 5px 5px 0px;
+    top: 0;
+    right: 0;
+    text-align: center;
+    font-size: 20px;
+    cursor: pointer;
+    border: none;
+}
+.search-input .autocom-box{
+    padding: 0px;
+    width: 100%;
+    border-radius: 5px;
+    overflow-y: auto;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: hsl(177, 87%, 21%) 0px -50px 36px -60px inset;
+}
+.search-input.active .autocom-box{
+    padding: 10px 8px;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+
+.autocom-box li{
+    list-style: none;
+    font-size: 18px;
+    padding: 8px 12px;
+    width: 100%;
+    cursor: default;
+    border-radius: 3px;
+    display: none;
+}
+.search-input.active .autocom-box li{
+    display: block;
+
+}
+
+
+.autocom-box li:hover{
+    background: hsl(191, 33%, 90%);
+}
+
+@media screen and (max-width: 768px){
+    .wrapper{
+        position: absolute;
+        width: auto;
+        height: 200px;
+        top: 40%;
+        left: 40%;
+        right: 20%;
+        margin: -100px 0 0 -150px;
+    }
+
+}
