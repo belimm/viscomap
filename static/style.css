@@ -133,7 +133,7 @@ nav{
     color: hsl(177, 87%, 21%);
 }
 
-.search-input .buttonIcon{
+.search-input .submitButton{
     height: 55px;
     width: 55px;
     line-height: 55px;
@@ -141,7 +141,7 @@ nav{
     position: absolute;
     color: hsl(177, 87%, 21%);
     border-radius: 0px 5px 5px 0px;
-    top: 0;
+    top: 19.2px;
     right: 0;
     text-align: center;
     font-size: 20px;

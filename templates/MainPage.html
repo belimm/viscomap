@@ -5,11 +5,13 @@
 {% endblock %}
 
 {% block Search %}
+{% from "formHelpers.html" import render_field %}
     <div class = "wrapper">
-        <div class="search-input" method = "POST">
-            <input type="text" placeholder="Write URL">
-            <button class = "buttonIcon"><img src="static/searchIcon.png"/></button>
+        <form method = 'POST' class="search-input" >
+            {{ form.url.label }} <br>
+            {{ form.url(placeholder='Write URL') }}
+            <button type = "submit" class = "submitButton"><img src="static/searchIcon.png"/></button>
             <div class = "autocom-box"></div>
-        </div>
+        </form>
     </div> 
 {% endblock %}
