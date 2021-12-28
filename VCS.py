@@ -41,7 +41,7 @@ def register():
         if not re.match(r'[^@]+@[^@]+\.[^@]+', email):
             msg["email"]='Invalid email address !'
         else:
-            cursor.execute('INSERT INTO users VALUES (NULL, % s, % s, % s, % s)', (username,name, password, email, ))
+            cursor.execute('INSERT INTO users VALUES (NULL, % s, % s, % s)', (username,name, password, email, ))
             mysql.connection.commit()
             msg["success"] ='You have successfully registered !'
             return render_template('MainPage.html',msg = msg)
