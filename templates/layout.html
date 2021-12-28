@@ -5,6 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.2/css/all.css" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://www.markuptag.com/bootstrap/5/css/bootstrap.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <title>
         {% block Title %}
             Layout
@@ -13,38 +19,55 @@
     <link rel = "shortcut icon" href="static/titleIcon.png" type = "image/x-icon">
 </head>
 <body>
-    <nav>
-        <div class = "logo">
-            <h4>
-                <img src="static/companyLogo.png"/>
-            </h4>
-        </div>
-        <ul class="nav-links">
-            <li>
-                <a href="#">Home</a>
+    {% block header %}
+           
+    {% endblock %}
+    {% block login %}
+        
+    {% endblock %}
+    
+    <!-- Footer -->
+    <footer id = "footer"class="page-footer font-small special-color-dark pt-4">
+
+        <!-- Footer Elements -->
+        <div class="container">
+    
+        <!-- Social buttons -->
+        <ul class="list-unstyled list-inline text-center">
+            <li class="list-inline-item">
+            <a href="#" class="btn-floating btn-fb mx-1">
+                <i class="fab fa-facebook-f"> </i>
+            </a>
             </li>
-            <li>
-                <a href="#">About</a>
+            <li class="list-inline-item">
+            <a href="#" class="btn-floating btn-tw mx-1">
+                <i class="fab fa-twitter"> </i>
+            </a>
             </li>
-            <li>
-                <a href="#">Contact</a>
+            <li class="list-inline-item">
+            <a href="#" class="btn-floating btn-gplus mx-1">
+                <i class="fab fa-google-plus-g"> </i>
+            </a>
             </li>
-            <li>
-                <a href="#">Login</a>
+            <li class="list-inline-item">
+            <a href="https://www.linkedin.com/in/irfankaanalgan/" class="btn-floating btn-li mx-1">
+                <i class="fab fa-linkedin-in"> </i>
+            </a>
+            </li>
+            <li class="list-inline-item">
+            <a href="#" class="btn-floating btn-dribbble mx-1">
+                <i class="fab fa-dribbble"> </i>
+            </a>
             </li>
         </ul>
-        <div class = "burger">
-            <div class="line1"></div>
-            <div class="line2"></div>
-            <div class="line3"></div>
+        <!-- Social buttons -->
+    
         </div>
-    </nav>
-    <div>
-        {% block Search %}
+        
+    
+    </footer>
+ 
+    <script src="https://www.markuptag.com/bootstrap/5/js/bootstrap.bundle.min.js"></script>
 
-        {% endblock %}
-    </div>
-    <script src="static/app.js"></script>
-    <script src = "static/suggestions.js"></script>
 </body>
 </html>

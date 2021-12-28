@@ -4,14 +4,109 @@
     ViscoMap
 {% endblock %}
 
-{% block Search %}
-{% from "formHelpers.html" import render_field %}
-    <div class = "wrapper">
-        <form method = 'POST' class="search-input" >
-            {{ form.url.label }} <br>
-            {{ form.url(placeholder='Write URL') }}
-            <button type = "submit" class = "submitButton"><img src="static/searchIcon.png"/></button>
-            <div class = "autocom-box"></div>
-        </form>
-    </div> 
+{% block header %}
+<header>
+    <nav class="my-navbar navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="my-navbar navbar-brand" href="/Home"><img src="static/companyLogo.png" alt="Logo" class="img-fluid" /></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/Home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact Us</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <button type="button" class="btn_login" data-bs-toggle="modal" data-bs-target="#LoginModal">Login</button>
+                </div>
+                <div class="d-flex">
+                    <button type="button" class="btn_login" data-bs-toggle="modal" data-bs-target="#RegisterModal">Register</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>      
 {% endblock %}
+{% block login %}
+<div class="modal fade" id="LoginModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+            <div class="section">
+                <div class="container">
+                    <div class="row full-height justify-content-center">
+                        <div class="card-3d-wra mx-auto">
+                            <div class="card-3d-wrapper">
+                                <div class="card-front">
+                                    <div class="center-wrap">
+                                        <div class="section text-center">
+                                            <h4 class="mb-4 pb-3 logsign">Log In</h4>
+                                            <form action="{{ url_for('register') }}" method="post">
+                                            <div class="form-group">
+                                                <input type="email" name="logemail" class="form-style" placeholder="Your Email" id="logemail" autocomplete="off">
+                                                <i class="input-icon uil uil-at"></i>
+                                            </div>	
+                                            <div class="form-group mt-2">
+                                                <input type="password" name="logpass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off">
+                                                <i class="input-icon uil uil-lock-alt"></i>
+                                            </div>
+                                            <input type="submit" class="btn" value="log In"></br>  
+                                            <p class="mb-0 mt-4 text-center"><a href="#0" class="link">Forgot your password?</a></p>
+                                        </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="RegisterModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+            <div class="section">
+                <div class="container">
+                    <div class="row full-height justify-content-center">
+                        <div class="card-3d-wrap mx-auto">
+                            <div class="card-3d-wrapper">
+                                <div class="card-front">
+                                    <div class="center-wrap">
+                                        <div class="section text-center">
+                                            <h4 class="mb-4 pb-3 logsign">Sign Up</h4>
+                                                <form action="{{ url_for('register') }}" method="post">
+                                                    <input id="username" name="username" type="text" placeholder="Enter Your Username" class="form-style"/></br></br>
+                                                    <div class="msg">{{ msg["name"] }}</div>
+                                                        <input id="name" name="name" type="text" placeholder="Enter Your Name" class="form-style"/></br></br>                                      
+                                                        <input id="password" name="password" type="password" placeholder="Enter Your Password" class="form-style"/></br></br>
+                                                        <div class="msg">{{ msg["email"] }}</div>
+                                                        <input id="email" name="email" type="text" placeholder="Enter Your Email ID" class="form-style"/></br></br>
+                                                        <div class="msg">{{ msg["formFill"] }}</div>
+                                                        <input type="submit" class="btn" value="Sign Up"></br>  
+                                                        <div class="msg">{{ msg["success"] }}</div>
+                                                    </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

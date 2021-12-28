@@ -23,7 +23,7 @@ const searchHist = () => {
                 allList[i].setAttribute("onClick", "select(this)");
             }
         }else{
-            searchWrapper.classList.remove("active");
+            searchWrapper.classList.remove("active") ;
         }
         
     }
@@ -70,4 +70,4 @@ const navSlide = () => {
 
 searchHist();
 navSlide();
-
+login();
