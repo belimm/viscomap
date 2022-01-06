@@ -24,7 +24,7 @@
                         <a class="nav-link" href="#">About Us</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Contact Us</a>
+                        <a class="nav-link" href="/profile">Contact Us</a>
                     </li>
                 </ul>
                 <div class="d-flex">
@@ -51,15 +51,17 @@
                                     <div class="center-wrap">
                                         <div class="section text-center">
                                             <h4 class="mb-4 pb-3 logsign">Log In</h4>
-                                            <form action="{{ url_for('register') }}" method="post">
-                                            <div class="form-group">
-                                                <input type="email" name="logemail" class="form-style" placeholder="Your Email" id="logemail" autocomplete="off">
+                                            <form action="{{ url_for('login') }}" method="post">
+                                            <div>
+                                                <input id="email" name="email" type="text" placeholder="Enter Your Email ID" class="form-style"/></br></br>
                                                 <i class="input-icon uil uil-at"></i>
                                             </div>	
-                                            <div class="form-group mt-2">
-                                                <input type="password" name="logpass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off">
+                                            <div>
+                                                <input id="password" name="password" type="password" placeholder="Enter Your Password" class="form-style"/></br></br>
                                                 <i class="input-icon uil uil-lock-alt"></i>
                                             </div>
+                                            <div class="msg">{{ msg["success"] }}</div>
+                                            <div class="msg">{{ msg["user"] }}</div>
                                             <input type="submit" class="btn" value="log In"></br>  
                                             <p class="mb-0 mt-4 text-center"><a href="#0" class="link">Forgot your password?</a></p>
                                         </form>
@@ -89,14 +91,15 @@
                                                 <form action="{{ url_for('register') }}" method="post">
                                                     <input id="username" name="username" type="text" placeholder="Enter Your Username" class="form-style"/></br></br>
                                                     <div class="msg">{{ msg["name"] }}</div>
-                                                        <input id="name" name="name" type="text" placeholder="Enter Your Name" class="form-style"/></br></br>                                      
-                                                        <input id="password" name="password" type="password" placeholder="Enter Your Password" class="form-style"/></br></br>
-                                                        <div class="msg">{{ msg["email"] }}</div>
-                                                        <input id="email" name="email" type="text" placeholder="Enter Your Email ID" class="form-style"/></br></br>
-                                                        <div class="msg">{{ msg["formFill"] }}</div>
-                                                        <input type="submit" class="btn" value="Sign Up"></br>  
-                                                        <div class="msg">{{ msg["success"] }}</div>
-                                                    </form>
+                                                    <input id="name" name="name" type="text" placeholder="Enter Your Name" class="form-style"/></br></br>                                      
+                                                    <input id="password" name="password" type="password" placeholder="Enter Your Password" class="form-style"/></br></br>
+                                                    <div class="msg">{{ msg["email"] }}</div>
+                                                    <input id="email" name="email" type="text" placeholder="Enter Your Email ID" class="form-style"/></br></br>
+                                                    <div class="msg">{{ msg["formFill"] }}</div>
+                                                    <input type="submit" class="btn" value="Sign Up"></br>  
+                                                    <div class="msg">{{ msg["success"] }}</div>
+                                                    <div class="msg">{{ msg["user"] }}</div>
+                                                </form>
                                         </div>
                                     </div>
                                 </div>

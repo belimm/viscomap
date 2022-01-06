@@ -32,53 +32,62 @@ def register():
         password = request.form['password']
         email = request.form['email']
         cursor = mysql.connection.cursor()
-        cursor.execute('SELECT * FROM users WHERE email = % s', (username, ))
+        cursor.execute('SELECT * FROM users WHERE username = % s', (username, ))
         user = cursor.fetchone()
         if user:
             msg["user"]= 'Account already exists !'  
-        if not name and not password and not email and not username:
+        elif not name and not password and not email and not username:
             msg["formFill"]='Please fill out the form !'        
-        if not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+        elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
             msg["email"]='Invalid email address !'
         else:
-            cursor.execute('INSERT INTO users VALUES (NULL, % s, % s, % s)', (username,name, password, email, ))
-            mysql.connection.commit()
-            msg["success"] ='You have successfully registered !'
-            return render_template('MainPage.html',msg = msg)
+            try:
+                cursor.execute('INSERT INTO users VALUES (NULL,%s, % s, % s, % s)', (username,name, email,password,  ))
+                mysql.connection.commit()
+                msg["success"] ='You have successfully registered !'
+            except:
+                msg["success"] ='Something went wrong !'
+                mysql.connection.rollback()
+            finally:
+                cursor.close()
     return render_template('MainPage.html',msg = msg)
+    
 
 
 
-@app.route('/<username>', methods=['GET', 'POST'])
-@login_required
-def login(username):
+@app.route('/', methods=['GET', 'POST'])
+def login():
     # Output message if something goes wrong...
-    msg = ''
+    msg = {"user":"", "formFill":"", "email":"","name":"","success":""}
     # Check if "username" and "password" POST requests exist (user submitted form)
-    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
+    if request.method == 'POST' and 'email' in request.form and 'password' in request.form:
         # Create variables for easy access
-        username = request.form['username']
+        email = request.form['email']
         password = request.form['password']
         # Check if user exists using MySQL
         cursor = mysql.connection.cursor()
-        cursor.execute('SELECT * FROM users WHERE username = %s AND password = %s', (username, password,))
+        cursor.execute('SELECT * FROM users WHERE email = %s AND password = %s', (email, password,))
         # Fetch one record and return result
         user = cursor.fetchone()
         # If user exists in user table in out database
+        msg["user"] = 'Incorrect username/password!'
         if user:
             # Create session data, we can access this data in other routes
             session['loggedin'] = True
             session['id'] = user['id']
-            session['username'] = user['username']
+            session['email'] = user['email']
             # Redirect to home page
-            return 'Logged in successfully!'
+            msg["success"] ='You have successfully logged in !'
+            return redirect(url_for("profile"))
         else:
             # user doesnt exist or username/password incorrect
-            msg = 'Incorrect username/password!'
+            msg["user"] = 'Incorrect username/password!'
     # Show the login form with message (if any)
     return render_template('MainPage.html', msg=msg)
 
-
+@app.route('/profile', methods=['GET', 'POST'])
+def profile():
+    return render_template('profile.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
