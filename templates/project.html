@@ -1,0 +1,20 @@
+{% extends "MainPage.html" %}
+
+{% block Title %}
+    ViscoMap
+{% endblock %}
+
+
+{% block body %}
+
+<h2>{{project.project_name}}</h2>
+<br>
+Complexity Score : {{project.complexty_score}}
+<br>
+URL Address : {{project.url_address}}
+<br>
+Creation Date : {{project.creation_date}}
+<br>
+    
+{% endblock %}
+
