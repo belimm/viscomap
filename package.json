@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "node-horseman": "^3.3.0"
+  }
+}

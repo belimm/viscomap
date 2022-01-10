@@ -22,8 +22,12 @@
                                     <label>URL Address</label>
                                     <input type="text" class="form-control" name="urlAddress" id="urlAddress" placeholder="">
                                 </div>
+                                <div class="form-group">
+                                    <label>Depth</label>
+                                    <input type="text" class="form-control" name="Depth" id="Depth" placeholder="">
+                                </div>
                                 <br>
-                                <button button type="submit" class="btn btn-primary">Create Project</button>
+                                <input type="submit" class="btn btn-primary" value="Create Project">
                             </form>
                             
                         </div>             
@@ -31,7 +35,10 @@
                 </div>
             </div>
         </div>
-    </div>     
+    </div>
+    <div class="chart-wrap vertical col-md-5" >
+        <img src="'static/irfanalgan.png"  alt = "graph">
+    </div>
     <div class="col-md-5">
         <br><br>
         <div>
@@ -41,18 +48,30 @@
         <div>
             <h3>Projects</h3>
             <br>
-            <div>
-                <ul class="list-group">
-                {% for datas in data %}
-                    <li class="list-group-item">
-                        <a href= "/project/{{datas.project_id}}">
-                        {{datas.project_name}}
-                    </li>
-                {% endfor %}
-                </ul>
-            </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Project Name</th>
+                        <th>Complexity Score</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for datas in data %}
+                        <tr>
+                            <td><a href= "/project/{{datas.project_id}}">{{ datas.project_name }}</a></td>
+                            <td>{{ datas.complexty_score }}</td>
+                            <td>
+                                
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
         </div>
     </div>
+    {{crawledList}}
     
 {% endblock %}
 

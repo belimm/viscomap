@@ -9,12 +9,35 @@
 
 <h2>{{project.project_name}}</h2>
 <br>
-Complexity Score : {{project.complexty_score}}
+    <h4>Complexity Score : {{project.complexty_score}}</h4>
 <br>
-URL Address : {{project.url_address}}
+    <h4>URL Address : {{project.url_address}} </h4>
 <br>
-Creation Date : {{project.creation_date}}
+    <h4>Creation Date : {{project.creation_date}} </h4>
 <br>
+<div class="col-md-5">
+    <table class = "table">
+        <tr class = "table_header">
+        {% for header in headings %}
+            <th class = "table_cell">{{header}}</th>
+        {% endfor %}
+        </tr class = "table_row">
+        {% for index in df.index %}
+            <tr>
+            <td class = "table_cell">{{df["subsite_url"][index]}} </td>
+            <td class = "table_cell">{{df["complexity_score"][index]}} </td>
+            <td class = "table_cell">{{df["complexity_range"][index]}} </td>
+            </tr>
+        {% endfor %}
+      
+        
+    </table>
+</div>
+
+
+<div class="chart-wrap vertical col-md-5" >
+    <img src="'static/'+project['project_name']+'.png" alt="Trulli" width="500" height="333">
+</div>
     
 {% endblock %}
 

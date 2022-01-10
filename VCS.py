@@ -1,16 +1,19 @@
-from os import error
-from flask import Flask,render_template,request,jsonify,redirect,url_for,session,flash
+import os
+from flask import render_template,request,jsonify,redirect,url_for,session,flash
 from wtforms import Form,StringField,validators,PasswordField,EmailField
 from flask_login import login_required, logout_user
 #from webCrawler import hrefList,depthList
 import pandas as pd
+from datetime import date
+import json
 from app import app
 from db import mysql
 import re
-
-
+import sys
+import matplotlib.pyplot as plt
+from webCrawler import crawl
+import Mapping
 from functools import wraps
-from flask_login import login_manager, login_required, logout_user
 
 
 def login_required(f):
@@ -24,7 +27,8 @@ def login_required(f):
 
     return wrap
 
-headings = ("Project Name", "URL", "Address Name", "Complexity Value", "Creation Date")
+today = date.today()
+headings = ("Sub URL", "Complexity Score", "Complexity Range")
 class getURLForm(Form):
     url = StringField(label = "",validators=[validators.URL(require_tld= True,message="Please enter a valid URL")])
 
@@ -121,20 +125,99 @@ def profile():
 @app.route('/projects', methods=['GET', 'POST'])
 @login_required
 def projects():
-    if request.method == 'POST' and 'ProjectName' in request.form and 'urlAddress' in request.form  and 'urlAddressName' in request.form:
+    #crawledList = None
+    cursor = mysql.connection.cursor()
+    sql1 = "SELECT * FROM users WHERE user_id = % s" % session['id']
+    cursor.execute(sql1)
+    user = cursor.fetchone()
+    name = user['username']
+    if request.method == 'POST' and 'ProjectName' in request.form and 'urlAddress' in request.form and "Depth" in request.form:
         ProjectName = request.form['ProjectName']
         urlAddress = request.form['urlAddress']
-        urlAddressName = request.form['urlAddressName']
-        data = [ProjectName,urlAddress,urlAddressName]
+        Depth = request.form['Depth']
+        data = [ProjectName,urlAddress]
         resp = jsonify(data)
         resp.status_code = 200
         flash('You have successfully added a new URL !')
-    cursor = mysql.connection.cursor()
+        print(type(urlAddress), file=sys.stdout)
+        print(urlAddress, file=sys.stdout)
+        a = crawl(urlAddress,Depth)
+        print(a, file=sys.stdout)
+
+        os.chdir("C:\\Users\\IRPHAN\\Documents\\GitHub\\viscomap\\metu-emine-role-detection-api-ee564a450501")
+        os.system("node vcs-calculator.js")
+        with open('C:\\Users\\IRPHAN\\Documents\\GitHub\\viscomap\\metu-emine-role-detection-api-ee564a450501\\jsonDictionary.json') as f:
+            data = json.load(f)
+        print(data, file=sys.stdout)
+        print(type(data), file=sys.stdout)
+        print(data.keys(), file=sys.stdout)
+        print(data.values(), file=sys.stdout)
+        #print(jsondf, file=sys.stdout)
+        os.chdir("C:\\Users\\IRPHAN\\Documents\\GitHub\\viscomap")
+        #print(crawledList, file=sys.stdout)
+        #print(jsondf.iloc[[0]], file=sys.stdout)
+        mapDataFrame = pd.DataFrame(columns=['dept_1','complexity_score'])
+        #count_row  = jsondf.shape[1]
+        for keys, value in data.items():
+            mapDataFrame.loc[len(mapDataFrame)] = [keys,value]
+        #for col in jsondf.columns:
+         #   print(col, file=sys.stdout)
+        complexity_score = mapDataFrame["complexity_score"].mean()
+        print(complexity_score, file=sys.stdout)
+        mapDataFrame.insert(0,'URL', urlAddress)
+        #print(url, file=sys.stdout)
+        if not mapDataFrame.empty:
+            date = today.strftime("%Y/%m/%d")
+
+        print(mapDataFrame, file=sys.stdout)
+        Mapping.plotMap(mapDataFrame,name)
+        #mapDataFrame.concat(jsondf,ignore_index=True)
+        #df.loc[:, df.columns != 'b']
+        print("HEREEEEEEEEEEE", file=sys.stdout)
+        for index, row in mapDataFrame.iterrows():
+            print(row['dept_1'], file=sys.stdout)
+            print(row['complexity_score'], file=sys.stdout)
+        print("NOOOOOOOOOOOOOT HEREEEEEEEEEEE", file=sys.stdout)  
+        try:
+            cursor.execute('INSERT INTO projects VALUES (NULL,%s, % s, % s, % s, % s)', (ProjectName,complexity_score, urlAddress,date,session['id'], ))
+            mysql.connection.commit()
+            cursor.execute('SELECT project_id FROM projects WHERE project_name = % s AND user_id = % s', (ProjectName,session['id'], ))
+            project_id = cursor.fetchone()
+            for index, row in mapDataFrame.iterrows():
+                range = ""
+                if int(row['complexity_score']) <3:
+                    range = "Low"
+                elif int(row['complexity_score']) <5:
+                    range = "Medium"
+                elif int(row['complexity_score']) <7:
+                    range = "High"
+                else:
+                    range = "Very High"
+                print(row['dept_1'], file=sys.stdout)
+                print(row['complexity_score'], file=sys.stdout)
+                print(range, file=sys.stdout)
+                project_id = project_id['project_id']
+                print(project_id, file=sys.stdout)
+                try:
+                    print("GIRMELLIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII", file=sys.stdout)
+                    cursor.execute('INSERT INTO subsites VALUES (NULL,%s, % s, % s, % s)', (row['dept_1'],row['complexity_score'], range,project_id, ))
+                    print("GIRMELLIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII", file=sys.stdout)
+                except:
+                    mysql.connection.rollback()
+                    return redirect(url_for("projects"))
+                mysql.connection.commit()
+        except:
+            mysql.connection.rollback()
+            return redirect(url_for("index"))
+    #print(mapDataFrame, file=sys.stdout)
+    #Mapping.plotMap(jsondf,name)
+    
+
     sql = "SELECT * FROM projects WHERE user_id = % s" % session['id']
     cursor.execute(sql)
     data = cursor.fetchall()
     cursor.close()
-    return render_template('projects.html', data = data)
+    return render_template('projects.html',  data = data ,user = user)
     
 @app.route("/project/<string:id>")
 def project(id):
@@ -142,8 +225,19 @@ def project(id):
     sql = "SELECT * FROM projects WHERE project_id = % s" % id
     cursor.execute(sql)
     project = cursor.fetchone()
+   
+    subSql = "SELECT * FROM subsites WHERE project_id = % s" % id
+    cursor.execute(subSql)
+    sublist = cursor.fetchall()
     cursor.close()
-    return render_template('project.html', project = project)
+    if (sublist):
+        df = pd.DataFrame(sublist, columns=["subsite_url","complexity_score", "complexity_range", "project_id"])
+        df["complexity_score"] = df["complexity_score"].astype(float)
+        df.plot.bar(x='subsite_url', y='complexity_score', rot=0, title ="Complexity Score of Subsites")
+        #plt.savefig('static/'+project['project_name']+'.png')
+        return render_template('project.html', headings = headings ,project = project,df = df)
+    else:
+        return render_template('projects.html')
 
         
    
