@@ -15,28 +15,45 @@
 <br>
     <h4>Creation Date : {{project.creation_date}} </h4>
 <br>
-<div class="col-md-5">
-    <table class = "table">
-        <tr class = "table_header">
-        {% for header in headings %}
-            <th class = "table_cell">{{header}}</th>
-        {% endfor %}
-        </tr class = "table_row">
-        {% for index in df.index %}
-            <tr>
-            <td class = "table_cell">{{df["subsite_url"][index]}} </td>
-            <td class = "table_cell">{{df["complexity_score"][index]}} </td>
-            <td class = "table_cell">{{df["complexity_range"][index]}} </td>
-            </tr>
-        {% endfor %}
-      
-        
-    </table>
+<div>
+    <div class="d-flex flex-nowrap">
+        <div class="mr-auto p-2">
+            <div class="col-md-4">
+                <table class = "table">
+                    <tr class = "table_header">
+                        <th>ID</th>
+                    {% for header in headings %}
+                        <th class = "table_cell">{{header}}</th>
+                    {% endfor %}
+                    </tr class = "table_row">
+                    {% for index in df.index %}
+                        <tr>
+                            <td class = "table_cell">
+                                {{index}}
+                             </td>
+                        <td class = "table_cell">
+                            <a href= "{{df["subsite_url"][index]}}">
+                            {{df["subsite_url"][index]}}
+                            </a>
+                         </td>
+                        <td class = "table_cell">{{df["complexity_score"][index]}} </td>
+                        <td class = "table_cell">{{df["complexity_range"][index]}} </td>
+                        </tr>
+                    {% endfor %}
+                  
+                </table>
+                </div>
+        </div>
+        <div class="ml-auto p-2">
+            <div class="col-md-4">
+                <img src = "static/{{project.project_name}}.png" title = "{{project.project_name}}" alt = "{{project.project_name}}"   />
+            </div>
+        </div>
+      </div>
 </div>
 
 
 <div class="chart-wrap vertical col-md-5" >
-    <img src="'static/'+project['project_name']+'.png" alt="Trulli" width="500" height="333">
 </div>
     
 {% endblock %}

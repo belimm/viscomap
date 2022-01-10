@@ -157,6 +157,7 @@ def projects():
         #print(crawledList, file=sys.stdout)
         #print(jsondf.iloc[[0]], file=sys.stdout)
         mapDataFrame = pd.DataFrame(columns=['dept_1','complexity_score'])
+        
         #count_row  = jsondf.shape[1]
         for keys, value in data.items():
             mapDataFrame.loc[len(mapDataFrame)] = [keys,value]
@@ -165,18 +166,16 @@ def projects():
         complexity_score = mapDataFrame["complexity_score"].mean()
         print(complexity_score, file=sys.stdout)
         mapDataFrame.insert(0,'URL', urlAddress)
+        mapDataFrame.to_csv("deneme.csv", index=False)
         #print(url, file=sys.stdout)
         if not mapDataFrame.empty:
             date = today.strftime("%Y/%m/%d")
 
         print(mapDataFrame, file=sys.stdout)
-        Mapping.plotMap(mapDataFrame,name)
+        Mapping.plotMap(mapDataFrame,ProjectName)
         #mapDataFrame.concat(jsondf,ignore_index=True)
         #df.loc[:, df.columns != 'b']
-        print("HEREEEEEEEEEEE", file=sys.stdout)
-        for index, row in mapDataFrame.iterrows():
-            print(row['dept_1'], file=sys.stdout)
-            print(row['complexity_score'], file=sys.stdout)
+        
         print("NOOOOOOOOOOOOOT HEREEEEEEEEEEE", file=sys.stdout)  
         try:
             cursor.execute('INSERT INTO projects VALUES (NULL,%s, % s, % s, % s, % s)', (ProjectName,complexity_score, urlAddress,date,session['id'], ))
@@ -198,17 +197,21 @@ def projects():
                 print(range, file=sys.stdout)
                 project_id = project_id['project_id']
                 print(project_id, file=sys.stdout)
+                urlString = str(row['dept_1'])
+                complexString = str(row['complexity_score'])
                 try:
+                    
                     print("GIRMELLIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII", file=sys.stdout)
-                    cursor.execute('INSERT INTO subsites VALUES (NULL,%s, % s, % s, % s)', (row['dept_1'],row['complexity_score'], range,project_id, ))
+                    cursor.execute('INSERT INTO subsites VALUES (NULL,%s, % s, % s, % s)', (urlString,complexString, range,project_id, ))
                     print("GIRMELLIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII", file=sys.stdout)
+                    mysql.connection.commit()
                 except:
                     mysql.connection.rollback()
                     return redirect(url_for("projects"))
-                mysql.connection.commit()
         except:
             mysql.connection.rollback()
-            return redirect(url_for("index"))
+            return redirect(url_for("projects"))
+        
     #print(mapDataFrame, file=sys.stdout)
     #Mapping.plotMap(jsondf,name)
     
@@ -219,25 +222,27 @@ def projects():
     cursor.close()
     return render_template('projects.html',  data = data ,user = user)
     
-@app.route("/project/<string:id>")
+@app.route("/<string:id>", methods=['GET', 'POST'])
+@login_required
 def project(id):
     cursor = mysql.connection.cursor()
     sql = "SELECT * FROM projects WHERE project_id = % s" % id
     cursor.execute(sql)
     project = cursor.fetchone()
-   
+    
+    
     subSql = "SELECT * FROM subsites WHERE project_id = % s" % id
     cursor.execute(subSql)
     sublist = cursor.fetchall()
     cursor.close()
-    if (sublist):
+    if sublist:
         df = pd.DataFrame(sublist, columns=["subsite_url","complexity_score", "complexity_range", "project_id"])
-        df["complexity_score"] = df["complexity_score"].astype(float)
-        df.plot.bar(x='subsite_url', y='complexity_score', rot=0, title ="Complexity Score of Subsites")
-        #plt.savefig('static/'+project['project_name']+'.png')
-        return render_template('project.html', headings = headings ,project = project,df = df)
     else:
-        return render_template('projects.html')
+        df = pd.DataFrame(columns=["subsite_url","complexity_score", "complexity_range", "project_id"])
+    
+    
+    return render_template('project.html', headings = headings ,project = project,df = df)
+
 
         
    

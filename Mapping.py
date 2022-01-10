@@ -10,22 +10,30 @@ import matplotlib.pyplot as plt
 
 
 def plotMap(df,projectName):
-    
+
     #df.loc[:, df.columns != 'b']
-    paths = df.loc[:,'URL':].stack().groupby(level=0).agg(list).values.tolist()  
+    paths = df.loc[:,'URL':].stack().groupby(level=0).agg(list).values.tolist()
 
     G = nx.DiGraph()
-    for path in paths:
+
+    for i,path in enumerate(paths):
+        path[0] = 0
+        path[1] = "{}".format(i+1,path[2])
+        path[2] = "{:.2f}".format(path[2])
+
         nx.add_path(G, path)
-    
+
+    print(paths,type(paths))
     colors = [i/len(G.nodes) for i in range(len(G.nodes))]
-    pos=graphviz_layout(G, prog='circo')
+    pos=graphviz_layout(G, prog='dot')
     nx.draw(G, pos=pos,
             node_color=colors, 
             node_size=1500,
             with_labels=True, 
             arrows=True)
-    plt.savefig('static/'+projectName+'.png')
+
+    plt.savefig('static/'+ projectName +'.png')
+    
     
   
 

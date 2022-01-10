@@ -1,7 +1,7 @@
 {% extends "MainPage.html" %}
 
 {% block Title %}
-    ViscoMap
+    Projects
 {% endblock %}
 
       
@@ -36,9 +36,7 @@
             </div>
         </div>
     </div>
-    <div class="chart-wrap vertical col-md-5" >
-        <img src="'static/irfanalgan.png"  alt = "graph">
-    </div>
+    
     <div class="col-md-5">
         <br><br>
         <div>
@@ -59,7 +57,7 @@
                 <tbody>
                     {% for datas in data %}
                         <tr>
-                            <td><a href= "/project/{{datas.project_id}}">{{ datas.project_name }}</a></td>
+                            <td><a href= "/{{datas.project_id}}">{{ datas.project_name }}</a></td>
                             <td>{{ datas.complexty_score }}</td>
                             <td>
                                 
