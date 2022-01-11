@@ -2,7 +2,6 @@ import os
 from flask import render_template,request,jsonify,redirect,url_for,session,flash
 from wtforms import Form,StringField,validators,PasswordField,EmailField
 from flask_login import login_required, logout_user
-#from webCrawler import hrefList,depthList
 import pandas as pd
 from datetime import date
 import json
@@ -12,7 +11,8 @@ import re
 import sys
 import matplotlib.pyplot as plt
 from webCrawler import crawl
-import Mapping
+#import Mapping
+#import mysql.connector
 from functools import wraps
 
 
@@ -139,6 +139,8 @@ def projects():
         resp = jsonify(data)
         resp.status_code = 200
         flash('You have successfully added a new URL !')
+        mapDataFrame = pd.read_csv('deneme.csv')
+        """"
         print(type(urlAddress), file=sys.stdout)
         print(urlAddress, file=sys.stdout)
         a = crawl(urlAddress,Depth)
@@ -163,26 +165,28 @@ def projects():
             mapDataFrame.loc[len(mapDataFrame)] = [keys,value]
         #for col in jsondf.columns:
          #   print(col, file=sys.stdout)
+         """
         complexity_score = mapDataFrame["complexity_score"].mean()
         print(complexity_score, file=sys.stdout)
-        mapDataFrame.insert(0,'URL', urlAddress)
-        mapDataFrame.to_csv("deneme.csv", index=False)
+        #mapDataFrame.insert(0,'URL', urlAddress)
+        #mapDataFrame.to_csv("deneme.csv", index=False)
         #print(url, file=sys.stdout)
         if not mapDataFrame.empty:
             date = today.strftime("%Y/%m/%d")
 
         print(mapDataFrame, file=sys.stdout)
-        Mapping.plotMap(mapDataFrame,ProjectName)
+        #Mapping.plotMap(mapDataFrame,ProjectName)
         #mapDataFrame.concat(jsondf,ignore_index=True)
         #df.loc[:, df.columns != 'b']
         
         print("NOOOOOOOOOOOOOT HEREEEEEEEEEEE", file=sys.stdout)  
         try:
-            cursor.execute('INSERT INTO projects VALUES (NULL,%s, % s, % s, % s, % s)', (ProjectName,complexity_score, urlAddress,date,session['id'], ))
+            cursor.execute('INSERT INTO projects VALUES (NULL,%s, %s, %s, %s, %s)', (ProjectName,complexity_score, urlAddress,date,session['id'], ))
             mysql.connection.commit()
-            cursor.execute('SELECT project_id FROM projects WHERE project_name = % s AND user_id = % s', (ProjectName,session['id'], ))
-            project_id = cursor.fetchone()
+            project_id = cursor.lastrowid
+            
             for index, row in mapDataFrame.iterrows():
+                print(f"test in row {index}")
                 range = ""
                 if int(row['complexity_score']) <3:
                     range = "Low"
@@ -195,20 +199,22 @@ def projects():
                 print(row['dept_1'], file=sys.stdout)
                 print(row['complexity_score'], file=sys.stdout)
                 print(range, file=sys.stdout)
-                project_id = project_id['project_id']
+                
                 print(project_id, file=sys.stdout)
                 urlString = str(row['dept_1'])
                 complexString = str(row['complexity_score'])
                 try:
                     
                     print("GIRMELLIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII", file=sys.stdout)
-                    cursor.execute('INSERT INTO subsites VALUES (NULL,%s, % s, % s, % s)', (urlString,complexString, range,project_id, ))
+                    cursor.execute('INSERT INTO subsites VALUES (NULL, %s, %s, %s, %s)', (urlString, complexString, range, project_id))
                     print("GIRMELLIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII", file=sys.stdout)
                     mysql.connection.commit()
+                    
                 except:
                     mysql.connection.rollback()
                     return redirect(url_for("projects"))
         except:
+            
             mysql.connection.rollback()
             return redirect(url_for("projects"))
         
