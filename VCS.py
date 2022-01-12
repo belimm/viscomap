@@ -31,6 +31,7 @@ def login_required(f):
 loginFlag = 0
 today = date.today()
 headings = ("Sub URL", "Complexity Score", "Complexity Range")
+
 class getURLForm(Form):
     url = StringField(label = "",validators=[validators.URL(require_tld= True,message="Please enter a valid URL")])
 

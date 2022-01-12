@@ -6,14 +6,39 @@
 
 
 {% block body %}
-
+<br>
 <h2>{{project.project_name}}</h2>
-<br>
-    <h4>Complexity Score : {{project.complexty_score}}</h4>
-<br>
-    <h4>URL Address : {{project.url_address}} </h4>
-<br>
-    <h4>Creation Date : {{project.creation_date}} </h4>
+
+
+<table class = "table">
+    </tr class = "table_row">
+    
+        <tr>
+            <td class = "table_cell">
+                Complexity Score 
+             </td>
+            <td class = "table_cell">
+                {{project.complexty_score}}
+             </td>
+        </tr>
+        <tr>
+            <td class = "table_cell">
+                URL Address
+             </td>
+            <td class = "table_cell">
+                {{project.url_address}}
+             </td>
+        </tr>
+        <tr>
+            <td class = "table_cell">
+                Creation Date
+             </td>
+            <td class = "table_cell">
+                {{project.creation_date}}
+             </td>
+        </tr>
+  
+</table>
 <br>
 <div>
     <div class="d-flex flex-nowrap resultDiv">

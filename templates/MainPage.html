@@ -25,10 +25,9 @@
     <header>
         <nav class="my-navbar navbar navbar-expand-lg navbar-dark">
             <div class="container">
-                <a class="my-navbar navbar-brand" href="{{ url_for('Home') }}"><img src="static/companyLogo.png" alt="Logo" class="img-fluid" /></a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                <a class="my-navbar navbar-brand" href="{{ url_for('Home') }}"><img src="static/companyLogo2.png" alt="Logo" class="img-fluid" />
+                    <span class="black">ViscoMap</span>
+                </a>
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav mx-auto">
                         <li class="nav-item">
@@ -58,6 +57,7 @@
                             <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
                             </ul>
                         </div>
+                    
                     {% else %}
                     <div class="d-flex">
                         <button  type="button" class="btn_login" data-bs-toggle="modal" data-bs-target="#LoginModal">Login</button>
