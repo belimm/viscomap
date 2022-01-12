@@ -14,8 +14,8 @@
             <div class="modal-content">
                 <div class="section" id = "createProjectSection">
                     <div class="container">
+                        
                         <div class="section text-center">
-                            
                             <form action="{{ url_for('projects') }}" method="POST">
                                 <div class="form-group">
                                     <label>Project Name</label>
@@ -31,10 +31,10 @@
                                 </div>
                                 <br>
                                 <input type="submit" class="btn btn-primary" value="Create Project">
-                            </form>
-                            
-                        </div>             
-                    </div>
+                            </form> 
+                        </div>  
+                    </div>           
+                    
                 </div>
             </div>
         </div>
@@ -81,3 +81,7 @@
     
 {% endblock %}
 
+{% block welcome %}
+     
+     
+     {% endblock %}

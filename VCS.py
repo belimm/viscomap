@@ -88,13 +88,21 @@ def register():
         name = request.form['name']
         password = request.form['password']
         email = request.form['email']
+        
+        cursor2 = mysql.connection.cursor() 
+        cursor2.execute('SELECT * FROM users WHERE email = % s', (email, ))
+        emailCheck = cursor2.fetchone()
+        cursor2.close()
+
         cursor = mysql.connection.cursor()
         cursor.execute('SELECT * FROM users WHERE username = % s', (username, ))
         user = cursor.fetchone()
         if user:
             msg["user"]= 'Account already exists !'  
         elif not name and not password and not email and not username:
-            msg["formFill"]='Please fill out the form !'        
+            msg["formFill"]='Please fill out the form !' 
+        elif emailCheck:
+            msg["email"]='Email already exists !'       
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
             msg["email"]='Invalid email address !'
         else:
@@ -112,11 +120,11 @@ def register():
 
 
 @app.route('/Home', methods=['GET', 'POST'])
-@login_required
 def Home():
-    if loginFlag == 0:
-        welcomeMsg = 'Welcome to the ViscoMap ' + session['name']
-    return render_template('Home.html',welcomeMsg = welcomeMsg)
+    if session['logged_in']:
+        return render_template('Home.html')
+    else:
+        return redirect(url_for('index'))
 
 
 @app.route('/profile', methods=['GET', 'POST'])
@@ -165,18 +173,14 @@ def editProfile():
             else:
                 editedpassword = user['password']
             if userCheck:
-                print(email, file=sys.stdout)
                 editedemail = user['email']
                 eror["email"] = 'Email already exists !'
             elif not re.match(r'[^@]+@[^@]+\.[^@]+', email) and email:
-                print("2.if", file=sys.stdout)
                 editedemail = user['email']
                 eror["email"] = 'Please enter a valid email address !'
             elif email and re.match(r'[^@]+@[^@]+\.[^@]+', email):
-                print("3.if", file=sys.stdout)
                 editedemail = email
-            else:
-                print("else", file=sys.stdout)
+            else: 
                 editedemail = user['email']
             if eror["password"] or eror["email"]:
                 return render_template('editProfile.html', eror = eror)
@@ -199,8 +203,13 @@ def editProfile():
 
 @app.route('/About', methods=['GET', 'POST'])
 def About():
-    print(2)
+
     return render_template('About.html')
+
+@app.route('/Features', methods=['GET', 'POST'])
+def Features():
+
+    return render_template('Features.html')
 
 @app.route('/Contact', methods=['GET', 'POST'])
 def ContactUs():

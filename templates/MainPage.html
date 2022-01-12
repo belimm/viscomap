@@ -32,10 +32,11 @@
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav mx-auto">
                         <li class="nav-item">
+                            
                             <a class="nav-link" href="{{ url_for('Home') }}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Features</a>
+                            <a class="nav-link" href="{{ url_for('Features') }}">Features</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('About') }}">About Us</a>
@@ -97,7 +98,7 @@
                                                         <p class = "message">{{ loginMsg }}</p>  
                                                     </div>  
                                                 {% endif %}
-                                                <input type="submit" class="btn" value="log In"></br>  
+                                                <input type="submit" class="btn" id = "loginButtonModal" value="log In"></br>  
                                                 <p class="mb-0 mt-4 text-center"><a href="#0" class="link">Forgot your password?</a></p>
                                             </form>
                                             </div>
@@ -143,7 +144,7 @@
                                                                 <p class = "message">{{ msg["formFill"] }}</p>  
                                                             </div>  
                                                         {% endif %}  
-                                                        <input type="submit" class="btn" value="Sign Up"></br>
+                                                        <input type="submit" class="btn" id = "signUpButtonModal" value="Sign Up"></br>
                                                         {% if msg["success"] %}
                                                             <div class="alert" role="alert">
                                                                 <p class = "message">{{ msg["success"] }}</p>  
@@ -167,7 +168,22 @@
             </div>
         </div>
     </div>
-    {% endblock %}
+    {% endblock %}   
+     {% block welcome %}
+    <div class = "mainPageContent">
+        <div class = "mainHeader">
+            <h1>Welcome to the ViscoMap</h1>
+        </div>
+        <div class ="body_main_page">
+
+        </div>
+    </div>
+    
+
+     
+     {% endblock %}
+
+
 
     {% block footer %}
 <!-- Footer -->
