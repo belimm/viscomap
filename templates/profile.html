@@ -30,11 +30,11 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <input type="submit" class="profile-edit-btn" name="btnAddMore" value="Edit Profile"/>
+                <button type="button"  onclick="window.location.href='{{ url_for( 'editProfile' ) }}';" class="profile-edit-btn" name="btnAddMore" >Edit Profile</button>
             </div>
             
             <div class="col-md-3">
-                <button type="button" onclick="window.location.href='{{ url_for( 'projects' ) }}';" class="profile-edit-btn" name="btnAddMore" >Projects</button>
+                <button type="button"  onclick="window.location.href='{{ url_for( 'projects' ) }}';" class="profile-edit-btn" name="btnAddMore" >Projects</button>
 
             </div>
         </div>

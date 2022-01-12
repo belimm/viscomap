@@ -32,16 +32,16 @@
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav mx-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" href="{{ url_for('Home') }}">Home</a>
+                            <a class="nav-link" href="{{ url_for('Home') }}">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Features</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">About Us</a>
+                            <a class="nav-link" href="{{ url_for('About') }}">About Us</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('Home') }}">Contact Us</a>
+                            <a class="nav-link" href="{{ url_for('ContactUs') }}">Contact Us</a>
                         </li>
                     </ul>
                     {% if session.get('logged_in')%}
@@ -52,8 +52,7 @@
                             </button>
                             <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{{ url_for('projects') }}">Projects</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('editProfile') }}">Edit Profile</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
                             </ul>
@@ -93,6 +92,11 @@
                                                     <input id="password" name="password" type="password" placeholder="Enter Your Password" class="form-style"/></br></br>
                                                     <i class="input-icon uil uil-lock-alt"></i>
                                                 </div>
+                                                {% if loginMsg %}
+                                                    <div class="alert" role="alert">
+                                                        <p class = "message">{{ loginMsg }}</p>  
+                                                    </div>  
+                                                {% endif %}
                                                 <input type="submit" class="btn" value="log In"></br>  
                                                 <p class="mb-0 mt-4 text-center"><a href="#0" class="link">Forgot your password?</a></p>
                                             </form>
@@ -121,15 +125,36 @@
                                                 <h4 class="mb-4 pb-3 logsign">Sign Up</h4>
                                                     <form action="{{ url_for('register') }}" method="post">
                                                         <input id="username" name="username" type="text" placeholder="Enter Your Username" class="form-style"/></br></br>
-                                                        <div class="msg">{{ msg["name"] }}</div>
+                                                        {% if msg["name"] %}
+                                                            <div class="alert" role="alert">
+                                                                <p class = "message">{{ msg["name"] }}</p>  
+                                                            </div>  
+                                                        {% endif %}                                             
                                                         <input id="name" name="name" type="text" placeholder="Enter Your Name" class="form-style"/></br></br>                                      
                                                         <input id="password" name="password" type="password" placeholder="Enter Your Password" class="form-style"/></br></br>
-                                                        <div class="msg">{{ msg["email"] }}</div>
+                                                        {% if msg["email"] %}
+                                                            <div class="alert" role="alert">
+                                                                <p class = "message">{{ msg["email"] }}</p>  
+                                                            </div>  
+                                                        {% endif %}  
                                                         <input id="email" name="email" type="text" placeholder="Enter Your Email ID" class="form-style"/></br></br>
-                                                        <div class="msg">{{ msg["formFill"] }}</div>
-                                                        <input type="submit" class="btn" value="Sign Up"></br>  
-                                                        <div class="msg">{{ msg["success"] }}</div>
-                                                        <div class="msg">{{ msg["user"] }}</div>
+                                                        {% if msg["formFill"] %}
+                                                            <div class="alert" role="alert">
+                                                                <p class = "message">{{ msg["formFill"] }}</p>  
+                                                            </div>  
+                                                        {% endif %}  
+                                                        <input type="submit" class="btn" value="Sign Up"></br>
+                                                        {% if msg["success"] %}
+                                                            <div class="alert" role="alert">
+                                                                <p class = "message">{{ msg["success"] }}</p>  
+                                                            </div>  
+                                                        {% endif %}
+                                                        {% if msg["user"] %}
+                                                            <div class="alert" role="alert">
+                                                                <p class = "message">{{ msg["user"] }}</p>  
+                                                            </div>  
+                                                        {% endif %}  
+                                                        
                                                     </form>
                                             </div>
                                         </div>
@@ -186,8 +211,7 @@
 
 </footer>
 {% endblock %}
-
 <script src="https://www.markuptag.com/bootstrap/5/js/bootstrap.bundle.min.js"></script>
-
+<script src="static/app.js"></script>
 </body>
 </html>

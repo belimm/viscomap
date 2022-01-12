@@ -6,10 +6,13 @@
 
       
 {% block body %}
+    {% if error %}  
+    <p><strong>Error</strong>: {{error}}</p>  
+    {% endif %}  
     <div class="modal fade" id="createProject">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="section">
+                <div class="section" id = "createProjectSection">
                     <div class="container">
                         <div class="section text-center">
                             
@@ -39,9 +42,14 @@
     
     <div class="col-md-5">
         <br><br>
+        {% if eror %}
+            <div class="alert alert-success" role="alert">
+                   <h4>{{  eror }}</h4>  
+            </div>  
+        {% endif %} 
         <div>
         <button  type="button" class="btn_login" data-bs-toggle="modal" data-bs-target="#createProject">Create New Project</button>
-        </div>
+        </div>   
         <br>
         <div>
             <h3>Projects</h3>
@@ -69,7 +77,7 @@
 
         </div>
     </div>
-    {{crawledList}}
+    
     
 {% endblock %}
 

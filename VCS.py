@@ -1,4 +1,5 @@
 import os
+from MySQLdb.cursors import Cursor
 from flask import render_template,request,jsonify,redirect,url_for,session,flash
 from wtforms import Form,StringField,validators,PasswordField,EmailField
 from flask_login import login_required, logout_user
@@ -27,10 +28,12 @@ def login_required(f):
 
     return wrap
 
+loginFlag = 0
 today = date.today()
 headings = ("Sub URL", "Complexity Score", "Complexity Range")
 class getURLForm(Form):
     url = StringField(label = "",validators=[validators.URL(require_tld= True,message="Please enter a valid URL")])
+
 
 @app.route('/')
 def index():
@@ -41,24 +44,30 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     msg = ''
+    loginMsg = 'Welcome to the login page'
     if request.method == 'POST' and 'email' in request.form and 'password' in request.form:
         email = request.form['email']
         password = request.form['password']
-        cursor = mysql.connection.cursor()
-        cursor.execute('SELECT * FROM users WHERE email = % s AND password = % s', (email, password, ))
-        user = cursor.fetchone()
-        if user:
-            session['logged_in'] = True
-            session['id'] = user['user_id']
-            session['email'] = user['email']
-            return redirect(url_for("Home"))
+        if not email or not password :
+            loginMsg = 'Please fill out the form'
         else:
-            msg = 'Incorrect username / password !'
-            return redirect(url_for("index"))
+            cursor = mysql.connection.cursor()
+            cursor.execute('SELECT * FROM users WHERE email = % s AND password = % s', (email, password, ))
+            user = cursor.fetchone()
+            if user:
+                session['logged_in'] = True
+                session['id'] = user['user_id']
+                session['email'] = user['email']
+                session['name'] = user['name']
+                session['password'] = user['password']
+                return redirect(url_for("Home"))
+            else:
+                loginMsg = 'Incorrect username / password !'
+                return render_template('MainPage.html', msg = msg, loginMsg = loginMsg)
     if session.get('logged_in'):
         flash('You have been automatically logged out.')
         del session['logged_in']
-    return render_template('MainPage.html', msg = msg)
+    return render_template('MainPage.html', msg = msg, loginMsg = loginMsg)
 
 @app.route('/logout')
 @login_required
@@ -94,7 +103,6 @@ def register():
                 mysql.connection.commit()
                 msg["success"] ='You have successfully registered !'
             except:
-                msg["success"] ='Something went wrong !'
                 mysql.connection.rollback()
                 return redirect(url_for("index"))
             finally:
@@ -106,9 +114,9 @@ def register():
 @app.route('/Home', methods=['GET', 'POST'])
 @login_required
 def Home():
-    #form = getURLForm(request.form)
-
-    return render_template('Home.html')
+    if loginFlag == 0:
+        welcomeMsg = 'Welcome to the ViscoMap ' + session['name']
+    return render_template('Home.html',welcomeMsg = welcomeMsg)
 
 
 @app.route('/profile', methods=['GET', 'POST'])
@@ -122,10 +130,90 @@ def profile():
     cursor.close()
     return render_template('profile.html', userInfo = userInfo)
 
+@app.route('/editProfile', methods=['GET', 'POST'])
+@login_required
+def editProfile():
+    eror = {"password":"", "email":"", "success":""}
+    if request.method == 'POST' and 'username' in request.form and 'name' in request.form  and 'password' in request.form and 'email' in request.form :
+        username = request.form['username']
+        name = request.form['name']
+        password = request.form['password']
+        email = request.form['email']
+
+        cursor2 = mysql.connection.cursor() 
+        cursor2.execute('SELECT * FROM users WHERE email = % s', (email, ))
+        userCheck = cursor2.fetchone()
+        cursor2.close()
+        
+        cursor = mysql.connection.cursor()
+        sql = "SELECT * FROM users WHERE user_id = % s" % session['id']
+        cursor.execute(sql)
+        user = cursor.fetchone()
+        if user:
+            if username:
+                editedusername = username
+            else:
+                editedusername = user['username']
+            if name:
+                editedname = name
+            else:
+                editedname = user['name']
+            if password and (password != user['password']):
+                editedpassword = password
+            elif password == user['password']:
+                eror["password"] = 'Please enter a new password ! Your password is the same as your old password !'
+            else:
+                editedpassword = user['password']
+            if userCheck:
+                print(email, file=sys.stdout)
+                editedemail = user['email']
+                eror["email"] = 'Email already exists !'
+            elif not re.match(r'[^@]+@[^@]+\.[^@]+', email) and email:
+                print("2.if", file=sys.stdout)
+                editedemail = user['email']
+                eror["email"] = 'Please enter a valid email address !'
+            elif email and re.match(r'[^@]+@[^@]+\.[^@]+', email):
+                print("3.if", file=sys.stdout)
+                editedemail = email
+            else:
+                print("else", file=sys.stdout)
+                editedemail = user['email']
+            if eror["password"] or eror["email"]:
+                return render_template('editProfile.html', eror = eror)
+            else:
+                try:
+                    sql = "update users set username='%s' , name='%s', email='%s' ,password='%s' where user_id='%s'" % (editedusername,editedname,editedemail,editedpassword,session['id'])                   
+                    cursor.execute(sql)
+                    mysql.connection.commit()
+                    cursor.close()
+                    if not name and not password and not email and not username:
+                        return redirect(url_for("profile"))
+                    eror["success"] = 'You have successfully edited your profile !'
+                except Exception as e:
+                    print(e)
+                    return render_template('editProfile.html')
+        eror["password"] = False
+        eror["email"] = False
+        userCheck = False
+    return render_template('editProfile.html',eror = eror)
+
+@app.route('/About', methods=['GET', 'POST'])
+def About():
+    print(2)
+    return render_template('About.html')
+
+@app.route('/Contact', methods=['GET', 'POST'])
+def ContactUs():
+
+    return render_template('ContactUs.html')
+
 @app.route('/projects', methods=['GET', 'POST'])
 @login_required
 def projects():
     #crawledList = None
+    eror = None
+    
+    mapDataFrame = pd.DataFrame(columns=['dept_1','complexity_score'])
     cursor = mysql.connection.cursor()
     sql1 = "SELECT * FROM users WHERE user_id = % s" % session['id']
     cursor.execute(sql1)
@@ -135,92 +223,80 @@ def projects():
         ProjectName = request.form['ProjectName']
         urlAddress = request.form['urlAddress']
         Depth = request.form['Depth']
-        data = [ProjectName,urlAddress]
-        resp = jsonify(data)
-        resp.status_code = 200
-        flash('You have successfully added a new URL !')
-        print(type(urlAddress), file=sys.stdout)
-        print(urlAddress, file=sys.stdout)
-        a = crawl(urlAddress,Depth)
-        print(a, file=sys.stdout)
+        if not urlAddress or not ProjectName or not Depth:
+            eror = 'Please fill out the form'
+        elif not re.match(r'((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])*', urlAddress):
+            eror = 'Please enter a valid URL'
+        elif Depth.isdigit() == False or int(Depth) < 1 or int(Depth) > 5:
+            eror = 'Please enter a valid Depth'
+        else:
+            crawl(urlAddress,Depth)
 
-        os.chdir("C:\\Users\\IRPHAN\\Documents\\GitHub\\viscomap\\metu-emine-role-detection-api-ee564a450501")
-        os.system("node vcs-calculator.js")
-        with open('C:\\Users\\IRPHAN\\Documents\\GitHub\\viscomap\\metu-emine-role-detection-api-ee564a450501\\jsonDictionary.json') as f:
-            data = json.load(f)
-        print(data, file=sys.stdout)
-        print(type(data), file=sys.stdout)
-        print(data.keys(), file=sys.stdout)
-        print(data.values(), file=sys.stdout)
-        #print(jsondf, file=sys.stdout)
-        os.chdir("C:\\Users\\IRPHAN\\Documents\\GitHub\\viscomap")
-        #print(crawledList, file=sys.stdout)
-        #print(jsondf.iloc[[0]], file=sys.stdout)
-        mapDataFrame = pd.DataFrame(columns=['dept_1','complexity_score'])
-        
-        #count_row  = jsondf.shape[1]
-        for keys, value in data.items():
-            mapDataFrame.loc[len(mapDataFrame)] = [keys,value]
-        #for col in jsondf.columns:
-         #   print(col, file=sys.stdout)
-        complexity_score = mapDataFrame["complexity_score"].mean()
-        print(complexity_score, file=sys.stdout)
-        mapDataFrame.insert(0,'URL', urlAddress)
-        mapDataFrame.to_csv("deneme.csv", index=False)
-        #print(url, file=sys.stdout)
-        if not mapDataFrame.empty:
-            date = today.strftime("%Y/%m/%d")
-
-        print(mapDataFrame, file=sys.stdout)
-        Mapping.plotMap(mapDataFrame,ProjectName)
-        #mapDataFrame.concat(jsondf,ignore_index=True)
-        #df.loc[:, df.columns != 'b']
-        
-        print("NOOOOOOOOOOOOOT HEREEEEEEEEEEE", file=sys.stdout)  
-        try:
-            cursor.execute('INSERT INTO projects VALUES (NULL,%s, % s, % s, % s, % s)', (ProjectName,complexity_score, urlAddress,date,session['id'], ))
-            mysql.connection.commit()
-            cursor.execute('SELECT project_id FROM projects WHERE project_name = % s AND user_id = % s', (ProjectName,session['id'], ))
-            project_id = cursor.fetchone()
-            for index, row in mapDataFrame.iterrows():
-                range = ""
-                if int(row['complexity_score']) <3:
-                    range = "Low"
-                elif int(row['complexity_score']) <5:
-                    range = "Medium"
-                elif int(row['complexity_score']) <7:
-                    range = "High"
-                else:
-                    range = "Very High"
-                print(row['dept_1'], file=sys.stdout)
-                print(row['complexity_score'], file=sys.stdout)
-                print(range, file=sys.stdout)
-                project_id = project_id['project_id']
-                print(project_id, file=sys.stdout)
-                urlString = str(row['dept_1'])
-                complexString = str(row['complexity_score'])
-                try:
-                    
-                    print("GIRMELLIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII", file=sys.stdout)
-                    cursor.execute('INSERT INTO subsites VALUES (NULL,%s, % s, % s, % s)', (urlString,complexString, range,project_id, ))
-                    print("GIRMELLIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII", file=sys.stdout)
-                    mysql.connection.commit()
-                except:
-                    mysql.connection.rollback()
-                    return redirect(url_for("projects"))
-        except:
-            mysql.connection.rollback()
-            return redirect(url_for("projects"))
-        
-    #print(mapDataFrame, file=sys.stdout)
-    #Mapping.plotMap(jsondf,name)
+            os.chdir("C:\\Users\\IRPHAN\\Documents\\GitHub\\viscomap\\metu-emine-role-detection-api-ee564a450501")
+            os.system("node vcs-calculator.js")
+            with open('C:\\Users\\IRPHAN\\Documents\\GitHub\\viscomap\\metu-emine-role-detection-api-ee564a450501\\jsonDictionary.json') as f:
+                data = json.load(f)
+            
+            os.chdir("C:\\Users\\IRPHAN\\Documents\\GitHub\\viscomap")
+            
+            #count_row  = jsondf.shape[1]
+            for keys, value in data.items():
+                mapDataFrame.loc[len(mapDataFrame)] = [keys,value]
+            #for col in jsondf.columns:
+            #   print(col, file=sys.stdout)
+            complexity_score = mapDataFrame["complexity_score"].mean()
+            complexity_score = float("{:.2f}".format(complexity_score))
+            print(complexity_score, file=sys.stdout)
+            mapDataFrame.insert(0,'URL', urlAddress)
+            mapDataFrame.to_csv("deneme.csv", index=False)
+            #print(url, file=sys.stdout)
+            if not mapDataFrame.empty:
+                date = today.strftime("%Y/%m/%d")
+            Mapping.plotMap(mapDataFrame,ProjectName)
+            #mapDataFrame.concat(jsondf,ignore_index=True)
+            #df.loc[:, df.columns != 'b']
+            
+            try:
+                cursor.execute('INSERT INTO projects VALUES (NULL,%s, %s, %s, %s, %s)', (ProjectName,complexity_score, urlAddress,date,session['id'], ))
+                mysql.connection.commit()
+                project_id = cursor.lastrowid
+                
+                for index, row in mapDataFrame.iterrows():
+                    range = ""
+                    if int(row['complexity_score']) <3:
+                        range = "Low"
+                    elif int(row['complexity_score']) <5:
+                        range = "Medium"
+                    elif int(row['complexity_score']) <7:
+                        range = "High"
+                    else:
+                        range = "Very High"
+                    row['complexity_score'] = float("{:.2f}".format(row['complexity_score']))
+                    urlString = str(row['dept_1'])
+                    complexString = str(row['complexity_score'])
+                    try:
+                        cursor.execute('INSERT INTO subsites VALUES (NULL, %s, %s, %s, %s)', (urlString, complexString, range, project_id))
+                        mysql.connection.commit()
+                        
+                    except:
+                        mysql.connection.rollback()
+                        return redirect(url_for("projects"))
+            except:
+                mysql.connection.rollback()
+                
+                return redirect(url_for("projects"))
+            
+        #print(mapDataFrame, file=sys.stdout)
+        #Mapping.plotMap(jsondf,name)
     
 
     sql = "SELECT * FROM projects WHERE user_id = % s" % session['id']
     cursor.execute(sql)
     data = cursor.fetchall()
+    if(data):
+        flash('You were successfully created a project')
     cursor.close()
-    return render_template('projects.html',  data = data ,user = user)
+    return render_template('projects.html',  data = data ,user = user, mapDataFrame = mapDataFrame, eror = eror)
     
 @app.route("/<string:id>", methods=['GET', 'POST'])
 @login_required

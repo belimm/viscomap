@@ -106,5 +106,4 @@ def crawl(main_url, depth):
     json.dump(crawledList,ourLinks,indent=4)
     ourLinks.close()
 
-    return crawledList
 # Set for storing urls with same domain

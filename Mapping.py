@@ -32,7 +32,7 @@ def plotMap(df,projectName):
             with_labels=True, 
             arrows=True)
 
-    plt.savefig('static/'+ projectName +'.png')
+    plt.savefig('static/images/'+ projectName +'.png')
     
     
   
@@ -45,6 +45,7 @@ def plotMap(df,projectName):
             node_size=1500,
             with_labels=True, 
             arrows=True)
+c
 
     with open(filepath, 'wb') as img:
     plt.savefig(img)

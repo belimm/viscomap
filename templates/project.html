@@ -16,7 +16,7 @@
     <h4>Creation Date : {{project.creation_date}} </h4>
 <br>
 <div>
-    <div class="d-flex flex-nowrap">
+    <div class="d-flex flex-nowrap resultDiv">
         <div class="mr-auto p-2">
             <div class="col-md-4">
                 <table class = "table">
@@ -29,7 +29,7 @@
                     {% for index in df.index %}
                         <tr>
                             <td class = "table_cell">
-                                {{index}}
+                                {{index+1}}
                              </td>
                         <td class = "table_cell">
                             <a href= "{{df["subsite_url"][index]}}">
@@ -44,9 +44,10 @@
                 </table>
                 </div>
         </div>
-        <div class="ml-auto p-2">
-            <div class="col-md-4">
-                <img src = "static/{{project.project_name}}.png" title = "{{project.project_name}}" alt = "{{project.project_name}}"   />
+        <div class="ml-auto p-2" id = "mapImgDiv">
+            <h4>{{project.project_name}}</h4>
+            <div class="col-md-4" >
+                <img src = "static/images/{{project.project_name}}.png" title = "{{project.project_name}}" alt = "{{project.project_name}}"   />
             </div>
         </div>
       </div>
