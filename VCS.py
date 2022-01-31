@@ -237,7 +237,7 @@ def projects():
             eror = 'Please fill out the form'
         elif not re.match(r'((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])*', urlAddress):
             eror = 'Please enter a valid URL'
-        elif Depth.isdigit() == False or int(Depth) < 1 or int(Depth) > 5:
+        elif Depth.isdigit() == False or int(Depth) < 1 or int(Depth) > 1:
             eror = 'Please enter a valid Depth'
         else:
             crawl(urlAddress,Depth)
@@ -256,7 +256,6 @@ def projects():
             #   print(col, file=sys.stdout)
             complexity_score = mapDataFrame["complexity_score"].mean()
             complexity_score = float("{:.2f}".format(complexity_score))
-            print(complexity_score, file=sys.stdout)
             mapDataFrame.insert(0,'URL', urlAddress)
             mapDataFrame.to_csv("deneme.csv", index=False)
             #print(url, file=sys.stdout)

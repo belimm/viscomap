@@ -86,7 +86,7 @@
                                                 <h4 class="mb-4 pb-3 logsign">Log In</h4>
                                                 <form action="{{ url_for('login') }}" method="post">
                                                 <div>
-                                                    <input id="email" name="email" type="text" placeholder="Enter Your Email ID" class="form-style"/></br></br>
+                                                    <input id="email" name="email" type="text" placeholder="Enter Your Email" class="form-style"/></br></br>
                                                     <i class="input-icon uil uil-at"></i>
                                                 </div>	
                                                 <div>
@@ -99,10 +99,10 @@
                                                     </div>  
                                                 {% endif %}
                                                 <input type="submit" class="btn" id = "loginButtonModal" value="log In"></br>  
-                                                <p class="mb-0 mt-4 text-center"><a href="#0" class="link">Forgot your password?</a></p>
+                                                <button  type="button" class="btn" id = "signUpButtonModal" data-bs-toggle="modal" data-bs-target="#RegisterModal">Register</button>
                                             </form>
                                             </div>
-                                        </div>
+                                        </div> 
                                     </div>
                                 </div>
                             </div>
@@ -138,7 +138,7 @@
                                                                 <p class = "message">{{ msg["email"] }}</p>  
                                                             </div>  
                                                         {% endif %}  
-                                                        <input id="email" name="email" type="text" placeholder="Enter Your Email ID" class="form-style"/></br></br>
+                                                        <input id="email" name="email" type="text" placeholder="Enter Your Email" class="form-style"/></br></br>
                                                         {% if msg["formFill"] %}
                                                             <div class="alert" role="alert">
                                                                 <p class = "message">{{ msg["formFill"] }}</p>  
@@ -195,28 +195,8 @@
     <!-- Social buttons -->
     <ul class="list-unstyled list-inline text-center">
         <li class="list-inline-item">
-        <a href="#" class="btn-floating btn-fb mx-1">
-            <i class="fab fa-facebook-f"> </i>
-        </a>
-        </li>
-        <li class="list-inline-item">
-        <a href="#" class="btn-floating btn-tw mx-1">
-            <i class="fab fa-twitter"> </i>
-        </a>
-        </li>
-        <li class="list-inline-item">
-        <a href="#" class="btn-floating btn-gplus mx-1">
-            <i class="fab fa-google-plus-g"> </i>
-        </a>
-        </li>
-        <li class="list-inline-item">
-        <a href="https://www.linkedin.com/in/irfankaanalgan/" class="btn-floating btn-li mx-1">
-            <i class="fab fa-linkedin-in"> </i>
-        </a>
-        </li>
-        <li class="list-inline-item">
-        <a href="#" class="btn-floating btn-dribbble mx-1">
-            <i class="fab fa-dribbble"> </i>
+        <a href="https://github.com/berklimoncu/viscomap" class="btn-floating btn-tw mx-1">
+            <i class="fab fa-github"> </i>
         </a>
         </li>
     </ul>
