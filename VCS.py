@@ -305,7 +305,7 @@ def projects():
     if(data):
         flash('You were successfully created a project')
     cursor.close()
-    return render_template('projects.html',  data = data ,user = user, mapDataFrame = mapDataFrame, eror = eror)
+    return render_template('projects.html',  data = data ,user = user, eror = eror)
     
 @app.route("/<string:id>", methods=['GET', 'POST'])
 @login_required

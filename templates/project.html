@@ -1,89 +1,142 @@
 {% extends "MainPage.html" %}
 
 {% block Title %}
-    ViscoMap
+    Project {{project.project_name}}
 {% endblock %}
 
 
 {% block body %}
-<br>
-<h2>{{project.project_name}}</h2>
+<br><br><br>
 
 
-<table class = "table">
-    </tr class = "table_row">
+<div class="container emp-profile">
+    <table id="DT_load" class="table table-bordered table-primary table-striped" style="text-align:center;background:rgb(64, 102,200);">
+
+            <tr>
+
+                <tr>
+                    <td class ="myProjectDetail" >
+                        Project Name:
+                    </td>
+                    <td class = "myProjectDetail">
+
+                        {{project.project_id}}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class = "myProjectDetail">
+                        URL Address:
+                    </td>
+                    <td class = "myProjectDetail">
+                        <a href="{{project.url_address}}" target="_blank">{{project.url_address}}</a>
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class ="myProjectDetail">
+                        Complexity Score:
+                    </td>
+                    <td class = "myProjectDetail">
+                        {{project.complexty_score}}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class = "myProjectDetail">
+                        Creation Date:
+                    </td>
+                    <td class = "myProjectDetail">
+                        {{project.creation_date}}
+                    </td>
+                </tr>
+
+            </tr>
+    </table>
+
+    <br>
+
     
-        <tr>
-            <td class = "table_cell">
-                Complexity Score 
-             </td>
-            <td class = "table_cell">
-                {{project.complexty_score}}
-             </td>
-        </tr>
-        <tr>
-            <td class = "table_cell">
-                URL Address
-             </td>
-            <td class = "table_cell">
-                {{project.url_address}}
-             </td>
-        </tr>
-        <tr>
-            <td class = "table_cell">
-                Creation Date
-             </td>
-            <td class = "table_cell">
-                {{project.creation_date}}
-             </td>
-        </tr>
-  
-</table>
-<br>
-<div>
+
+
     <div class="d-flex flex-nowrap resultDiv">
-        <div class="mr-auto p-2">
-            <div class="col-md-4">
-                <table class = "table">
-                    <tr class = "table_header">
-                        <th>ID</th>
-                    {% for header in headings %}
-                        <th class = "table_cell">{{header}}</th>
-                    {% endfor %}
-                    </tr class = "table_row">
-                    {% for index in df.index %}
-                        <tr>
-                            <td class = "table_cell">
-                                {{index+1}}
-                             </td>
-                        <td class = "table_cell">
-                            <a href= "{{df["subsite_url"][index]}}">
-                            {{df["subsite_url"][index]}}
-                            </a>
-                         </td>
-                        <td class = "table_cell">{{df["complexity_score"][index]}} </td>
-                        <td class = "table_cell">{{df["complexity_range"][index]}} </td>
-                        </tr>
-                    {% endfor %}
-                  
+
+        <div class="mr-auto p-2" style=" margin: 80px auto 100px; display: block;">
+
+            <div class="container emp-profile">
+                <table id="projectTable" class = "table">
+
+                    <div class="col-md-7">
+
+                            <thead>
+                                <tr class = "table_header">
+                                    <th>ID</th>
+                                        {% for header in headings %}
+                                        <th class = "table_cell">{{header}}</th>
+                                    {% endfor %}
+                            </thead>
+                            
+                            <tbody>
+                            </tr class = "table_row">
+                            {% for index in df.index %}
+                                <tr>
+                                    <td class = "table_cell">
+                                        {{index+1}}
+                                    </td>
+                                <td class = "table_cell">
+                                    <a href= "{{df['subsite_url'][index]}}">
+                                    {{df["subsite_url"][index]}}
+                                    </a>
+                                </td>
+
+
+
+                                {% if df["complexity_range"][index] == "Low"%}
+                                    <td class = "table_cell" style="color: green;" >{{df["complexity_score"][index]}} </td>
+                                    <td class = "table_cell" style="color: green;">{{df["complexity_range"][index]}} </td>
+                                {% endif %}
+
+                                {% if df["complexity_range"][index] == "Medium"%}
+                                    <td class = "table_cell" style="color: yellow;" >{{df["complexity_score"][index]}} </td>
+                                    <td class = "table_cell" style="color: yellow;">{{df["complexity_range"][index]}} </td>
+                                {% endif %}
+
+                                {% if df["complexity_range"][index] == "High"%}
+                                    <td class = "table_cell" style="color: orange;" >{{df["complexity_score"][index]}} </td>
+                                    <td class = "table_cell" style="color: orange;">{{df["complexity_range"][index]}} </td>
+                                {% endif %}
+
+                                {% if df["complexity_range"][index] == "Very High"%}
+                                    <td class = "table_cell" style="color: red;" >{{df["complexity_score"][index]}} </td>
+                                <td class = "table_cell" style="color: red;">{{df["complexity_range"][index]}} </td>
+                                {% endif %}
+
+
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                    </div>
                 </table>
-                </div>
-        </div>
-        <div class="ml-auto p-2" id = "mapImgDiv">
-            <h4>{{project.project_name}}</h4>
-            <div class="col-md-4" >
-                <img src = "static/images/{{project.project_name}}.png" title = "{{project.project_name}}" alt = "{{project.project_name}}"   />
+            </div>
+            
             </div>
         </div>
-      </div>
-</div>
+        
+        <div class="ml-auto p-2" id = "mapImgDiv">
+            <h4>{{project.project_name}}</h4>
 
-
-<div class="chart-wrap vertical col-md-5" >
-</div>
+            <div style="text-align: center; margin: 20px auto 80px; display: block;" >
+                <img src = "static/images/{{project.project_name}}.png" title = "{{project.project_name}}" alt = "{{project.project_name}}"/>
+            </div>
+        </div>
+    </div>
     
+    
+</div>
+
+
+
 {% endblock %}
-{% block welcome %}
-     
-     
-     {% endblock %}
+{% block main %}
+{% endblock %}

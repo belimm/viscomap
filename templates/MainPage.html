@@ -5,7 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="static/style2.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.2/css/all.css" />
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.1/css/jquery.dataTables.min.css" />
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,600" rel="stylesheet">
+	<script src="https://unpkg.com/animejs@3.0.1/lib/anime.min.js"></script>
+    <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://www.markuptag.com/bootstrap/5/css/bootstrap.min.css" />
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -20,12 +30,13 @@
     </title>
     <link rel = "shortcut icon" href="static/titleIcon.png" type = "image/x-icon">
 </head>
-<body>
+<body class="is-boxed has-animations">
+    
     {% block header %}
-    <header>
+    <header >
         <nav class="my-navbar navbar navbar-expand-lg navbar-dark">
             <div class="container">
-                <a class="my-navbar navbar-brand" href="{{ url_for('Home') }}"><img src="static/companyLogo2.png" alt="Logo" class="img-fluid" />
+                <a class="my-navbar navbar-brand" href="{{ url_for('Home') }}">
                     <span class="black">ViscoMap</span>
                 </a>
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -69,9 +80,11 @@
                 </div>
             </div>
         </nav>
-    </header>      
+    </header>
     {% endblock %}
+
     {% block body %}
+    
     <div class="modal fade" id="LoginModal">
         <div class="modal-dialog">
         <div class="modal-content">
@@ -168,26 +181,110 @@
             </div>
         </div>
     </div>
+    
     {% endblock %}   
-     {% block welcome %}
-    <div class = "mainPageContent">
-        <div class = "mainHeader">
-            <h1>Welcome to the ViscoMap</h1>
-        </div>
-        <div class ="body_main_page">
-
-        </div>
+    {% block main %}
+    <br><br><br><br><br><br><br><br>
+    <div>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-inner">
+                    <div class="hero-copy">
+                        <h1 class="hero-title mt-0">Landing template for startups</h1>
+                        <p class="hero-paragraph">Our landing page template works on all devices, so you only have to set it up once, and get beautiful results forever.</p>
+                        <div class="hero-cta"><a class="button button-primary" href="#">Pre order now</a><a class="button" href="#">Get in touch</a></div>
+                    </div>
+                    <div class="hero-figure anime-element">
+                        <svg class="placeholder" width="528" height="396" viewBox="0 0 528 396">
+                            <rect width="528" height="396" style="fill:transparent;" />
+                        </svg>
+                        <div class="hero-figure-box hero-figure-box-01" data-rotation="45deg"></div>
+                        <div class="hero-figure-box hero-figure-box-02" data-rotation="-45deg"></div>
+                        <div class="hero-figure-box hero-figure-box-03" data-rotation="0deg"></div>
+                        <div class="hero-figure-box hero-figure-box-04" data-rotation="-135deg"></div>
+                        <div class="hero-figure-box hero-figure-box-05"></div>
+                        <div class="hero-figure-box hero-figure-box-06"></div>
+                        <div class="hero-figure-box hero-figure-box-07"></div>
+                        <div class="hero-figure-box hero-figure-box-08" data-rotation="-22deg"></div>
+                        <div class="hero-figure-box hero-figure-box-09" data-rotation="-52deg"></div>
+                        <div class="hero-figure-box hero-figure-box-10" data-rotation="-50deg"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <br><br><br><br><br>
+        <section class="features section">
+            <div class="container">
+                <div class="features-inner section-inner has-bottom-divider">
+                    <div class="features-wrap">
+                        <div class="feature text-center is-revealing">
+                            <div class="feature-inner">
+                                <div class="feature-icon">
+                                    <img src="dist/images/feature-icon-01.svg" alt="Feature 01">
+                                </div>
+                                <h4 class="feature-title mt-24">Be Productive</h4>
+                                <p class="text-sm mb-0">Fermentum posuere urna nec tincidunt praesent semper feugiat nibh. A arcu cursus vitae congue mauris. Nam at lectus urna duis convallis. Mauris rhoncus aenean vel elit scelerisque mauris.</p>
+                            </div>
+                        </div>
+                        <div class="feature text-center is-revealing">
+                            <div class="feature-inner">
+                                <div class="feature-icon">
+                                    <img src="dist/images/feature-icon-02.svg" alt="Feature 02">
+                                </div>
+                                <h4 class="feature-title mt-24">Be Productive</h4>
+                                <p class="text-sm mb-0">Fermentum posuere urna nec tincidunt praesent semper feugiat nibh. A arcu cursus vitae congue mauris. Nam at lectus urna duis convallis. Mauris rhoncus aenean vel elit scelerisque mauris.</p>
+                            </div>
+                        </div>
+                        <div class="feature text-center is-revealing">
+                            <div class="feature-inner">
+                                <div class="feature-icon">
+                                    <img src="dist/images/feature-icon-03.svg" alt="Feature 03">
+                                </div>
+                                <h4 class="feature-title mt-24">Be Productive</h4>
+                                <p class="text-sm mb-0">Fermentum posuere urna nec tincidunt praesent semper feugiat nibh. A arcu cursus vitae congue mauris. Nam at lectus urna duis convallis. Mauris rhoncus aenean vel elit scelerisque mauris.</p>
+                            </div>
+                        </div>
+                        <div class="feature text-center is-revealing">
+                            <div class="feature-inner">
+                                <div class="feature-icon">
+                                    <img src="dist/images/feature-icon-04.svg" alt="Feature 04">
+                                </div>
+                                <h4 class="feature-title mt-24">Be Productive</h4>
+                                <p class="text-sm mb-0">Fermentum posuere urna nec tincidunt praesent semper feugiat nibh. A arcu cursus vitae congue mauris. Nam at lectus urna duis convallis. Mauris rhoncus aenean vel elit scelerisque mauris.</p>
+                            </div>
+                        </div>
+                        <div class="feature text-center is-revealing">
+                            <div class="feature-inner">
+                                <div class="feature-icon">
+                                    <img src="dist/images/feature-icon-05.svg" alt="Feature 05">
+                                </div>
+                                <h4 class="feature-title mt-24">Be Productive</h4>
+                                <p class="text-sm mb-0">Fermentum posuere urna nec tincidunt praesent semper feugiat nibh. A arcu cursus vitae congue mauris. Nam at lectus urna duis convallis. Mauris rhoncus aenean vel elit scelerisque mauris.</p>
+                            </div>
+                        </div>
+                        <div class="feature text-center is-revealing">
+                            <div class="feature-inner">
+                                <div class="feature-icon">
+                                    <img src="dist/images/feature-icon-06.svg" alt="Feature 06">
+                                </div>
+                                <h4 class="feature-title mt-24">Be Productive</h4>
+                                <p class="text-sm mb-0">Fermentum posuere urna nec tincidunt praesent semper feugiat nibh. A arcu cursus vitae congue mauris. Nam at lectus urna duis convallis. Mauris rhoncus aenean vel elit scelerisque mauris.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
+        
+    {% endblock %}
+    
+    
     
 
-     
-     {% endblock %}
-
-
-
-    {% block footer %}
+    
 <!-- Footer -->
-<footer id = "footer"class="page-footer font-small special-color-dark pt-3">
+<footer>
 
     <!-- Footer Elements -->
     <div class="container">
@@ -206,8 +303,10 @@
     
 
 </footer>
-{% endblock %}
+
 <script src="https://www.markuptag.com/bootstrap/5/js/bootstrap.bundle.min.js"></script>
 <script src="static/app.js"></script>
+<script src="static/main.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
 </body>
 </html>

@@ -8,82 +8,152 @@
 {% block body %}
     {% if error %}  
     <p><strong>Error</strong>: {{error}}</p>  
-    {% endif %}  
-    <div class="modal fade" id="createProject">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="section" id = "createProjectSection">
-                    <div class="container">
+    {% endif %} 
+
+        <div class="modal fade" id="createProject">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="section" id = "createProjectSection">
+                        <div class="container">
+                            
+                            <div class="section text-center">
+                                <form action="{{ url_for('projects') }}" method="POST">
+                                    <div class="form-group">
+                                        <label>Project Name</label>
+                                        <input type="text" class="form-control" name="ProjectName" id="ProjectName" placeholder="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>URL Address</label>
+                                        <input type="text" class="form-control" name="urlAddress" id="urlAddress" placeholder="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Depth</label>
+                                        <input type="text" class="form-control" name="Depth" id="Depth" placeholder="">
+                                    </div>
+                                    <br>
+                                    <button type="submit" class="button" value="Create Project" onclick="this.classList.toggle('button--loading')">
+                                        <span class="button__text">Create Project</span>
+                                    </button>
+                                    
+                                </form> 
+                            </div>  
+                        </div>           
                         
-                        <div class="section text-center">
-                            <form action="{{ url_for('projects') }}" method="POST">
-                                <div class="form-group">
-                                    <label>Project Name</label>
-                                    <input type="text" class="form-control" name="ProjectName" id="ProjectName" placeholder="">
-                                </div>
-                                <div class="form-group">
-                                    <label>URL Address</label>
-                                    <input type="text" class="form-control" name="urlAddress" id="urlAddress" placeholder="">
-                                </div>
-                                <div class="form-group">
-                                    <label>Depth</label>
-                                    <input type="text" class="form-control" name="Depth" id="Depth" placeholder="">
-                                </div>
-                                <br>
-                                <button type="submit" class="button"  onclick="this.classList.toggle('button--loading')">
-                                    <span class="button__text">Create Project</span>
-                                </button>
-                            </form> 
-                        </div>  
-                    </div>           
-                    
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    
-    <div class="col-md-5">
-        <br><br>
-        {% if eror %}
-            <div class="alert alert-success" role="alert">
-                   <h4>{{  eror }}</h4>  
-            </div>  
-        {% endif %} 
-        <div>
-        <button  type="button" class="btn_login" data-bs-toggle="modal" data-bs-target="#createProject">Create New Project</button>
-        </div>   
-        <br>
-        <div>
-            <h3>Projects</h3>
-            <br>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Project Name</th>
-                        <th>Complexity Score</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for datas in data %}
-                        <tr>
-                            <td><a href= "/{{datas.project_id}}">{{ datas.project_name }}</a></td>
-                            <td>{{ datas.complexty_score }}</td>
-                            <td>
-                                
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
 
+
+        <div class="modal fade" id="deleteProject">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="section" id = "createProjectSection"></div>
+                        <div class="section text-center">
+                            <form action="{{ url_for('projects') }}" method="POST">
+
+                            <span> Are you sure that you are going to delete project? {{datas}}</span>
+
+                            </br></br></br></br></br></br></br></br>
+                            <div>
+                                <button style="background-color: rgb(153, 28, 28);" type="submit" class="button" onclick="this.classList.toggle('button--loading')">
+                                    <span class="button__text" >Delete Project</span>
+                                </button>
+
+                                <button  type="submit" class="button" onclick="this.classList.toggle('button--loading')">
+                                    <span class="button__text" >Cancel</span>
+                                </button>
+
+                            </div>
+                               
+                            </br></br>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>            
         </div>
-    </div>
-    
-    
-{% endblock %}
 
-{% block welcome %}
-     
-     
-     {% endblock %}
+        <br><br><br>
+    <div class="container emp-profile">
+        <div class="col-md-13" style="margin-left: auto;margin-right: auto;">
+            <br><br>
+            {% if eror %}
+                <div class="alert alert-success" role="alert">
+                    <h4>{{  eror }}</h4>  
+                </div>  
+            {% endif %} 
+            <div>
+            
+            </div>   
+            
+            <div>
+                <div class="section text-center">
+                    <h3 >Projects</h3>
+                </div>
+                
+                <br>
+                <table id="DT_load" class="table table-striped" style="">
+                    <thead>
+                        <tr>
+                            <th>Project Name</th>
+                            <th>Complexity Score</th>
+                            <th>Delete</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        
+
+
+
+
+                        {% for datas in data %}
+                            <tr>
+                                <td><a href= "/{{datas.project_id}}">{{ datas.project_name }}</a></td>
+                                
+                               
+
+                                {%if datas.complexity_score==5.06 %}
+                                    
+
+                                    <td class = "table_cell" style="color: green;" >{{datas.complexity_score}} </td>
+                                    
+                                {% endif %}
+
+                                
+                                <td>{{ datas.complexty_score }}</td>
+
+                                <td>
+                                    <button  style="background-color: rgb(153, 28, 28);" type="button" class="btn_login" data-bs-toggle="modal" data-bs-target="#deleteProject"  style="width:50px;" >Delete</button>
+                                </td>
+                                
+                                    
+                                
+                            </tr>
+                        {% endfor %}
+                        
+                        
+
+
+
+                    </tbody>
+                </table>
+
+                <br><br>
+                <div  class="section text-center" >
+                    <button  type="button" class="btn_login" data-bs-toggle="modal" data-bs-target="#createProject">Create New Project</button>
+                </div>
+                
+            </div>
+        </div>
+        <br>
+    </div>
+
+
+{% endblock %}
+{% block main %}
+
+    
+    {% endblock %}
