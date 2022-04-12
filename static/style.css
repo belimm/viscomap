@@ -154,8 +154,7 @@ footer {
 .card-front, .card-back {
   width: 100%;
   height: 100%;
-  background-color: #2a2b38;
-  background-image: url('loginback.png');
+  background-color: #c9d2e4;
   background-position: bottom center;
   background-repeat: no-repeat;
   background-size: 300%;
@@ -208,7 +207,7 @@ footer {
   letter-spacing: 0.5px;
   outline: none;
   color: #c4c3ca;
-  background-color: #080808;
+  background-color: rgb(38, 84, 170);
   border: none;
   -webkit-transition: all 200ms linear;
   transition: all 200ms linear;
@@ -218,7 +217,7 @@ footer {
 .form-style:active {
   border: none;
   outline: none;
-  box-shadow: 0 4px 8px 0 rgba(21,21,21,.2);
+  box-shadow: 0 4px 8px 0 rgb(38, 84, 170);
 }
 .input-icon {
   position: absolute;
@@ -233,7 +232,7 @@ footer {
     transition: all 200ms linear;
 }
 .logsign{
-  color: #c4c3ca;
+  color: black;
 }
 .form-group input:-ms-input-placeholder  {
   color: #c4c3ca;
@@ -337,20 +336,25 @@ footer {
   box-shadow: 0 8px 24px 0 rgba(255,235,167,.2);
 }
 #loginButtonModal{
-  color: #c4c3ca;
+  background-color: rgb(38, 84, 170);
+  color: white;
 }
 #signUpButtonModal{
-  color: #c4c3ca;
+  background-color: rgb(38, 84, 170);
+  color: white;
+}
+#hiddenTr{
+  display: none;
 }
 
 .btn:active,
 .btn:focus{  
-  background-color: #102770;
+  background-color: #babbbe;
   color: #ffeba7;
   box-shadow: 0 8px 24px 0 rgba(16,39,112,.2);
 }
 .btn:hover{  
-  background-color: #102770;
+  background-color: #babbbe;
   color: #ffeba7;
   box-shadow: 0 8px 24px 0 rgba(16,39,112,.2);
 }

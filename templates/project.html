@@ -20,7 +20,7 @@
                     </td>
                     <td class = "myProjectDetail">
 
-                        {{project.project_id}}
+                        {{project.project_name}}
                     </td>
                 </tr>
 
@@ -69,53 +69,50 @@
 
                     <div class="col-md-7">
 
-                            <thead>
-                                <tr class = "table_header">
-                                    <th>ID</th>
-                                        {% for header in headings %}
-                                        <th class = "table_cell">{{header}}</th>
-                                    {% endfor %}
-                            </thead>
-                            
-                            <tbody>
-                            </tr class = "table_row">
-                            {% for index in df.index %}
-                                <tr>
-                                    <td class = "table_cell">
-                                        {{index+1}}
-                                    </td>
-                                <td class = "table_cell">
-                                    <a href= "{{df['subsite_url'][index]}}">
-                                    {{df["subsite_url"][index]}}
-                                    </a>
-                                </td>
+                        <thead>
+                            <tr class = "table_header">
+                                <th>ID</th>
+                                    {% for header in headings %}
+                                    <th class = "table_cell">{{header}}</th>
+                                {% endfor %}
+                        </thead>
+                        
+                        <tbody>
+                        </tr class = "table_row">
+                                {% for index in df.index %}
+                                    <tr>
+                                        <td class = "table_cell">
+                                            {{index+1}}
+                                        </td>
+                                        <td class = "table_cell">
+                                            <a href= "{{df['subsite_url'][index]}}">
+                                            {{df["subsite_url"][index]}}
+                                            </a>
+                                        </td>
 
+                                        {% if df["complexity_range"][index] == "Low"%}
+                                            <td class = "table_cell" style="color: green;" >{{df["complexity_score"][index]}} </td>
+                                            <td class = "table_cell" style="color: green;">{{df["complexity_range"][index]}} </td>
+                                        {% endif %}
 
+                                        {% if df["complexity_range"][index] == "Medium"%}
+                                            <td class = "table_cell" style="color: yellow;" >{{df["complexity_score"][index]}} </td>
+                                            <td class = "table_cell" style="color: yellow;">{{df["complexity_range"][index]}} </td>
+                                        {% endif %}
 
-                                {% if df["complexity_range"][index] == "Low"%}
-                                    <td class = "table_cell" style="color: green;" >{{df["complexity_score"][index]}} </td>
-                                    <td class = "table_cell" style="color: green;">{{df["complexity_range"][index]}} </td>
-                                {% endif %}
+                                        {% if df["complexity_range"][index] == "High"%}
+                                            <td class = "table_cell" style="color: orange;" >{{df["complexity_score"][index]}} </td>
+                                            <td class = "table_cell" style="color: orange;">{{df["complexity_range"][index]}} </td>
+                                        {% endif %}
 
-                                {% if df["complexity_range"][index] == "Medium"%}
-                                    <td class = "table_cell" style="color: yellow;" >{{df["complexity_score"][index]}} </td>
-                                    <td class = "table_cell" style="color: yellow;">{{df["complexity_range"][index]}} </td>
-                                {% endif %}
-
-                                {% if df["complexity_range"][index] == "High"%}
-                                    <td class = "table_cell" style="color: orange;" >{{df["complexity_score"][index]}} </td>
-                                    <td class = "table_cell" style="color: orange;">{{df["complexity_range"][index]}} </td>
-                                {% endif %}
-
-                                {% if df["complexity_range"][index] == "Very High"%}
-                                    <td class = "table_cell" style="color: red;" >{{df["complexity_score"][index]}} </td>
-                                <td class = "table_cell" style="color: red;">{{df["complexity_range"][index]}} </td>
-                                {% endif %}
-
-
-                                </tr>
-                            {% endfor %}
-                            </tbody>
+                                        {% if df["complexity_range"][index] == "Very High"%}
+                                            <td class = "table_cell" style="color: red;" >{{df["complexity_score"][index]}} </td>
+                                        <td class = "table_cell" style="color: red;">{{df["complexity_range"][index]}} </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                            </tr>
+                        </tbody>
                     </div>
                 </table>
             </div>
