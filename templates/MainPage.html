@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,11 +10,11 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.2/css/all.css" />
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.1/css/jquery.dataTables.min.css" />
-    
+
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,600" rel="stylesheet">
-	<script src="https://unpkg.com/animejs@3.0.1/lib/anime.min.js"></script>
+    <script src="https://unpkg.com/animejs@3.0.1/lib/anime.min.js"></script>
     <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
 
     <!-- Bootstrap CSS -->
@@ -25,15 +26,16 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <title>
         {% block Title %}
-            ViscoMap
+        ViscoMap
         {% endblock %}
     </title>
-    <link rel = "shortcut icon" href="static/titleIcon.png" type = "image/x-icon">
+    <link rel="shortcut icon" href="static/titleIcon.png" type="image/x-icon">
 </head>
+
 <body class="is-boxed has-animations">
+
     
-    {% block header %}
-    <header >
+    <header>
         <nav class="my-navbar navbar navbar-expand-lg navbar-dark">
             <div class="container">
                 <a class="my-navbar navbar-brand" href="{{ url_for('Home') }}">
@@ -42,7 +44,7 @@
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav mx-auto">
                         <li class="nav-item">
-                            
+
                             <a class="nav-link" href="{{ url_for('Home') }}">Home</a>
                         </li>
                         <li class="nav-item">
@@ -55,39 +57,47 @@
                             <a class="nav-link" href="{{ url_for('ContactUs') }}">Contact Us</a>
                         </li>
                     </ul>
-                    {% if session.get('logged_in')%}
-                        <div class="btn-group">
-                            <button button type="button" onclick="window.location.href='{{ url_for( 'profile' ) }}';"  class="btn btn-primary">Profile</button>
-                            <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+
+                    {% if auth.current_user %}
+                    <div class="btn-group">
+                        <button button type="button" onclick="window.location.href='{{ url_for( 'profile' ) }}';"
+                            class="btn btn-primary">Profile</button>
+                        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                            data-bs-toggle="dropdown" aria-expanded="false">
                             <span class="visually-hidden">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu">
+                        </button>
+                        <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{{ url_for('projects') }}">Projects</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('editProfile') }}">Edit Profile</a></li>
-                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
                             <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
-                            </ul>
-                        </div>
-                    
+                        </ul>
+                    </div>
+
                     {% else %}
                     <div class="d-flex">
-                        <button  type="button" class="btn_login" data-bs-toggle="modal" data-bs-target="#LoginModal">Login</button>
+                        <button type="button" class="btn_login" data-bs-toggle="modal"
+                            data-bs-target="#LoginModal">Login</button>
                     </div>
                     <div class="d-flex">
-                        <button  type="button" class="btn_login" data-bs-toggle="modal" data-bs-target="#RegisterModal">Register</button>
+                        <button type="button" class="btn_login" data-bs-toggle="modal"
+                            data-bs-target="#RegisterModal">Register</button>
                     </div>
                     {% endif %}
+
                 </div>
             </div>
         </nav>
     </header>
-    {% endblock %}
+    
 
     {% block body %}
-    
+
     <div class="modal fade" id="LoginModal">
         <div class="modal-dialog">
-        <div class="modal-content">
+            <div class="modal-content">
                 <div class="section">
                     <div class="container">
                         <div class="row full-height justify-content-center">
@@ -98,78 +108,27 @@
                                             <div class="section text-center">
                                                 <h4 class="mb-4 pb-3 logsign">Log In</h4>
                                                 <form action="{{ url_for('login') }}" method="post">
-                                                <div>
-                                                    <input id="email" name="email" type="text" placeholder="Enter Your Email" class="form-style"/></br></br>
-                                                    <i class="input-icon uil uil-at"></i>
-                                                </div>	
-                                                <div>
-                                                    <input id="password" name="password" type="password" placeholder="Enter Your Password" class="form-style"/></br></br>
-                                                    <i class="input-icon uil uil-lock-alt"></i>
-                                                </div>
-                                                {% if loginMsg %}
+                                                    <div>
+                                                        <input id="email" name="email" type="text"
+                                                            placeholder="Enter Your Email"
+                                                            class="form-style" /></br></br>
+                                                        <i class="input-icon uil uil-at"></i>
+                                                    </div>
+                                                    <div>
+                                                        <input id="password" name="password" type="password"
+                                                            placeholder="Enter Your Password"
+                                                            class="form-style" /></br></br>
+                                                        <i class="input-icon uil uil-lock-alt"></i>
+                                                    </div>
+                                                    {% if loginMsg %}
                                                     <div class="alert" role="alert">
-                                                        <p class = "message">{{ loginMsg }}</p>  
-                                                    </div>  
-                                                {% endif %}
-                                                <input type="submit" class="btn" id = "loginButtonModal" value="log In"></br>  
-                                               
-                                            </form>
-                                            </div>
-                                        </div> 
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="RegisterModal">
-        <div class="modal-dialog">
-        <div class="modal-content">
-                <div class="section">
-                    <div class="container">
-                        <div class="row full-height justify-content-center">
-                            <div class="card-3d-wrap mx-auto">
-                                <div class="card-3d-wrapper">
-                                    <div class="card-front">
-                                        <div class="center-wrap">
-                                            <div class="section text-center">
-                                                <h4 class="mb-4 pb-3 logsign">Sign Up</h4>
-                                                    <form action="{{ url_for('register') }}" method="post">
-                                                        <input id="username" name="username" type="text" placeholder="Enter Your Username" class="form-style"/></br></br>
-                                                        {% if msg["name"] %}
-                                                            <div class="alert" role="alert">
-                                                                <p class = "message">{{ msg["name"] }}</p>  
-                                                            </div>  
-                                                        {% endif %}                                             
-                                                        <input id="name" name="name" type="text" placeholder="Enter Your Name" class="form-style"/></br></br>                                      
-                                                        <input id="password" name="password" type="password" placeholder="Enter Your Password" class="form-style"/></br></br>
-                                                        {% if msg["email"] %}
-                                                            <div class="alert" role="alert">
-                                                                <p class = "message">{{ msg["email"] }}</p>  
-                                                            </div>  
-                                                        {% endif %}  
-                                                        <input id="email" name="email" type="text" placeholder="Enter Your Email" class="form-style"/></br></br>
-                                                        {% if msg["formFill"] %}
-                                                            <div class="alert" role="alert">
-                                                                <p class = "message">{{ msg["formFill"] }}</p>  
-                                                            </div>  
-                                                        {% endif %}  
-                                                        <input type="submit" class="btn" id = "signUpButtonModal" value="Sign Up"></br>
-                                                        {% if msg["success"] %}
-                                                            <div class="alert" role="alert">
-                                                                <p class = "message">{{ msg["success"] }}</p>  
-                                                            </div>  
-                                                        {% endif %}
-                                                        {% if msg["user"] %}
-                                                            <div class="alert" role="alert">
-                                                                <p class = "message">{{ msg["user"] }}</p>  
-                                                            </div>  
-                                                        {% endif %}  
-                                                        
-                                                    </form>
+                                                        <p class="message">{{ loginMsg }}</p>
+                                                    </div>
+                                                    {% endif %}
+                                                    <input type="submit" class="btn" id="loginButtonModal"
+                                                        value="log In"></br>
+
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -181,8 +140,71 @@
             </div>
         </div>
     </div>
-    
-    {% endblock %}   
+    <div class="modal fade" id="RegisterModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="section">
+                    <div class="container">
+                        <div class="row full-height justify-content-center">
+                            <div class="card-3d-wrap mx-auto">
+                                <div class="card-3d-wrapper">
+                                    <div class="card-front">
+                                        <div class="center-wrap">
+                                            <div class="section text-center">
+                                                <h4 class="mb-4 pb-3 logsign">Sign Up</h4>
+                                                <form action="{{ url_for('register') }}" method="post">
+                                                    <input id="username" name="username" type="text"
+                                                        placeholder="Enter Your Username"
+                                                        class="form-style" /></br></br>
+                                                    {% if msg["name"] %}
+                                                    <div class="alert" role="alert">
+                                                        <p class="message">{{ msg["name"] }}</p>
+                                                    </div>
+                                                    {% endif %}
+                                                    <input id="name" name="name" type="text"
+                                                        placeholder="Enter Your Name" class="form-style" /></br></br>
+                                                    <input id="password" name="password" type="password"
+                                                        placeholder="Enter Your Password"
+                                                        class="form-style" /></br></br>
+                                                    {% if msg["email"] %}
+                                                    <div class="alert" role="alert">
+                                                        <p class="message">{{ msg["email"] }}</p>
+                                                    </div>
+                                                    {% endif %}
+                                                    <input id="email" name="email" type="text"
+                                                        placeholder="Enter Your Email" class="form-style" /></br></br>
+                                                    {% if msg["formFill"] %}
+                                                    <div class="alert" role="alert">
+                                                        <p class="message">{{ msg["formFill"] }}</p>
+                                                    </div>
+                                                    {% endif %}
+                                                    <input type="submit" class="btn" id="signUpButtonModal"
+                                                        value="Sign Up"></br>
+                                                    {% if msg["success"] %}
+                                                    <div class="alert" role="alert">
+                                                        <p class="message">{{ msg["success"] }}</p>
+                                                    </div>
+                                                    {% endif %}
+                                                    {% if msg["user"] %}
+                                                    <div class="alert" role="alert">
+                                                        <p class="message">{{ msg["user"] }}</p>
+                                                    </div>
+                                                    {% endif %}
+
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}
     {% block main %}
     <br><br><br><br><br><br><br><br>
     <div>
@@ -191,12 +213,14 @@
                 <div class="hero-inner">
                     <div class="hero-copy">
                         <h2 class="hero-title mt-0">You are using hundreds of webpages every day</h2>
-                        <h6 class="hero-paragraph">but do you wanna learn their complexity as well?</h6>
+                        <h6 class="hero-paragraph">but do you wanna know their complexity as well?</h6>
                         <div class="hero-cta">
-                            {% if session.get('logged_in')%}
-                            <a class="button" onclick="window.location.href='{{ url_for( 'projects' ) }}';">Get in touch</a>
+                            {% if auth.current_user %}
+                            <a class="button" onclick="window.location.href='{{ url_for( 'projects' ) }}';">Get in
+                                touch</a>
                             {% else %}
-                            <button  class="button button-primary" type="button" class="btn_login" data-bs-toggle="modal" data-bs-target="#RegisterModal">Get Started</button>
+                            <button class="button button-primary" type="button" class="btn_login" data-bs-toggle="modal"
+                                data-bs-target="#RegisterModal">Get Started</button>
                             {% endif %}
                         </div>
                     </div>
@@ -229,7 +253,9 @@
                                     <img src="dist/images/feature-icon-01.svg" alt="Feature 01">
                                 </div>
                                 <h4 class="feature-title mt-24">Be Productive</h4>
-                                <p class="text-sm mb-0">Fermentum posuere urna nec tincidunt praesent semper feugiat nibh. A arcu cursus vitae congue mauris. Nam at lectus urna duis convallis. Mauris rhoncus aenean vel elit scelerisque mauris.</p>
+                                <p class="text-sm mb-0">Fermentum posuere urna nec tincidunt praesent semper feugiat
+                                    nibh. A arcu cursus vitae congue mauris. Nam at lectus urna duis convallis. Mauris
+                                    rhoncus aenean vel elit scelerisque mauris.</p>
                             </div>
                         </div>
                         <div class="feature text-center is-revealing">
@@ -238,7 +264,9 @@
                                     <img src="dist/images/feature-icon-02.svg" alt="Feature 02">
                                 </div>
                                 <h4 class="feature-title mt-24">Be Productive</h4>
-                                <p class="text-sm mb-0">Fermentum posuere urna nec tincidunt praesent semper feugiat nibh. A arcu cursus vitae congue mauris. Nam at lectus urna duis convallis. Mauris rhoncus aenean vel elit scelerisque mauris.</p>
+                                <p class="text-sm mb-0">Fermentum posuere urna nec tincidunt praesent semper feugiat
+                                    nibh. A arcu cursus vitae congue mauris. Nam at lectus urna duis convallis. Mauris
+                                    rhoncus aenean vel elit scelerisque mauris.</p>
                             </div>
                         </div>
                         <div class="feature text-center is-revealing">
@@ -247,7 +275,9 @@
                                     <img src="dist/images/feature-icon-03.svg" alt="Feature 03">
                                 </div>
                                 <h4 class="feature-title mt-24">Be Productive</h4>
-                                <p class="text-sm mb-0">Fermentum posuere urna nec tincidunt praesent semper feugiat nibh. A arcu cursus vitae congue mauris. Nam at lectus urna duis convallis. Mauris rhoncus aenean vel elit scelerisque mauris.</p>
+                                <p class="text-sm mb-0">Fermentum posuere urna nec tincidunt praesent semper feugiat
+                                    nibh. A arcu cursus vitae congue mauris. Nam at lectus urna duis convallis. Mauris
+                                    rhoncus aenean vel elit scelerisque mauris.</p>
                             </div>
                         </div>
                         <div class="feature text-center is-revealing">
@@ -256,7 +286,9 @@
                                     <img src="dist/images/feature-icon-04.svg" alt="Feature 04">
                                 </div>
                                 <h4 class="feature-title mt-24">Be Productive</h4>
-                                <p class="text-sm mb-0">Fermentum posuere urna nec tincidunt praesent semper feugiat nibh. A arcu cursus vitae congue mauris. Nam at lectus urna duis convallis. Mauris rhoncus aenean vel elit scelerisque mauris.</p>
+                                <p class="text-sm mb-0">Fermentum posuere urna nec tincidunt praesent semper feugiat
+                                    nibh. A arcu cursus vitae congue mauris. Nam at lectus urna duis convallis. Mauris
+                                    rhoncus aenean vel elit scelerisque mauris.</p>
                             </div>
                         </div>
                         <div class="feature text-center is-revealing">
@@ -265,7 +297,9 @@
                                     <img src="dist/images/feature-icon-05.svg" alt="Feature 05">
                                 </div>
                                 <h4 class="feature-title mt-24">Be Productive</h4>
-                                <p class="text-sm mb-0">Fermentum posuere urna nec tincidunt praesent semper feugiat nibh. A arcu cursus vitae congue mauris. Nam at lectus urna duis convallis. Mauris rhoncus aenean vel elit scelerisque mauris.</p>
+                                <p class="text-sm mb-0">Fermentum posuere urna nec tincidunt praesent semper feugiat
+                                    nibh. A arcu cursus vitae congue mauris. Nam at lectus urna duis convallis. Mauris
+                                    rhoncus aenean vel elit scelerisque mauris.</p>
                             </div>
                         </div>
                         <div class="feature text-center is-revealing">
@@ -274,7 +308,9 @@
                                     <img src="dist/images/feature-icon-06.svg" alt="Feature 06">
                                 </div>
                                 <h4 class="feature-title mt-24">Be Productive</h4>
-                                <p class="text-sm mb-0">Fermentum posuere urna nec tincidunt praesent semper feugiat nibh. A arcu cursus vitae congue mauris. Nam at lectus urna duis convallis. Mauris rhoncus aenean vel elit scelerisque mauris.</p>
+                                <p class="text-sm mb-0">Fermentum posuere urna nec tincidunt praesent semper feugiat
+                                    nibh. A arcu cursus vitae congue mauris. Nam at lectus urna duis convallis. Mauris
+                                    rhoncus aenean vel elit scelerisque mauris.</p>
                             </div>
                         </div>
                     </div>
@@ -282,38 +318,39 @@
             </div>
         </section>
     </div>
-        
+
     {% endblock %}
-    
-    
-    
 
-    
-<!-- Footer -->
-<footer>
 
-    <!-- Footer Elements -->
-    <div class="container">
 
-    <!-- Social buttons -->
-    <ul class="list-unstyled list-inline text-center">
-        <li class="list-inline-item">
-        <a href="https://github.com/berklimoncu/viscomap" class="btn-floating btn-tw mx-1">
-            <i class="fab fa-github"> </i>
-        </a>
-        </li>
-    </ul>
-    <!-- Social buttons -->
 
-    </div>
-    
 
-</footer>
+    <!-- Footer -->
+    <footer>
 
-<script src="https://www.markuptag.com/bootstrap/5/js/bootstrap.bundle.min.js"></script>
-<script src="static/app.js"></script>
-<script src="static/depth.js"></script>
-<script src="static/main.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
+        <!-- Footer Elements -->
+        <div class="container">
+
+            <!-- Social buttons -->
+            <ul class="list-unstyled list-inline text-center">
+                <li class="list-inline-item">
+                    <a href="https://github.com/berklimoncu/viscomap" class="btn-floating btn-tw mx-1">
+                        <i class="fab fa-github"> </i>
+                    </a>
+                </li>
+            </ul>
+            <!-- Social buttons -->
+
+        </div>
+
+
+    </footer>
+
+    <script src="https://www.markuptag.com/bootstrap/5/js/bootstrap.bundle.min.js"></script>
+    <script src="static/app.js"></script>
+    <script src="static/depth.js"></script>
+    <script src="static/main.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
 </body>
+
 </html>

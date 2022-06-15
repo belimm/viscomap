@@ -107,29 +107,16 @@
 
 
 
-                        {% for datas in data %}
-                            <tr>
-                                <td><a href= "/{{datas.project_id}}">{{ datas.project_name }}</a></td>
-                                
-                               
-
-                                {%if datas.complexity_score==5.06 %}
-                                    
-
-                                    <td class = "table_cell" style="color: green;" >{{datas.complexity_score}} </td>
-                                    
-                                {% endif %}
-
-                                
-                                <td>{{ datas.complexty_score }}</td>
-
-                                <td>
-                                    <button  style="background-color: rgb(153, 28, 28);" type="button" class="btn_login" data-bs-toggle="modal" data-bs-target="#deleteProject"  style="width:50px;" >Delete</button>
-                                </td>
-                                
-                                    
-                                
-                            </tr>
+                        {% for project in allProjects %}
+                                {% for key in project.keys() %}
+                                    <tr>
+                                        <td><a href = "/{{key}}">{{key}}</a></td>
+                                        <td>{% if key == "score"%}
+                                                {{project[key]}}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %} 
                         {% endfor %}
                         
                         

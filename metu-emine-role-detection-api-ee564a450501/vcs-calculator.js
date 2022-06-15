@@ -3,52 +3,35 @@ var fs = require('fs'),
 	pageSegmenter = require('./page-segmenter'),
     Horseman = require('node-horseman');
 
-var jsonData= require("C:\\Users\\IRPHAN\\Documents\\GitHub\\viscomap\\metu-emine-role-detection-api-ee564a450501\\ourLinks.json");
-//console.log(jsonData);
-console.log(jsonData);
+var jsonData= require("C:\\Users\\IRPHAN\\Documents\\GitHub\\viscomap\\ourLinks.json");
 
-var scoresDict = {};
+const urlArray=[];
+for(const key in jsonData){
+    if(urlArray[0]!=key){
+        urlArray[0]=key;
+    }
+    for(const nestedKey in jsonData[key]){
+        if(nestedKey != "score"){
+            urlArray.push(nestedKey);
+            //console.log("Displaying Depth 1",nestedKey);
+        }
+        for(const nestedKey2 in jsonData[key][nestedKey]){
+            if(nestedKey2 != "score"){
+                //console.log("Displaying Depth 2",nestedKey2);
+                urlArray.push(nestedKey2);
+            }
+        }
+    }
 
-var urlList = [
-    "https://www.google.com",
-	/*"https://www.youtube.com",
-	"https://www.facebook.com",
-	"http://www.baidu.com",
-	"https://www.wikipedia.org",
-	"https://www.reddit.com",
-	"https://www.yahoo.com",
-	"http://www.qq.com",
-	"https://world.taobao.com",*/
-/*	"https://www.tmall.com",
-	"https://www.amazon.com",
-	"https://twitter.com",
-	"http://www.sohu.com",
-	"https://www.instagram.com",
-	"https://outlook.live.com",
-	"https://vk.com",
-	"http://www.sina.com.cn",
-	"https://global.jd.com",
-	"https://www.360.cn",
-	"https://weibo.com",
-	"https://login.tmall.com",
-	"https://yandex.ru",
-	"https://www.linkedin.com",
-	"https://www.netflix.com",
-	"https://www.twitch.tv",
-	"https://www.alipay.com",
-	"https://www.yahoo.co.jp",
-	"http://t.co",
-	"https://www.ebay.com",
-	"https://www.microsoft.com",
-	"https://ok.ru",
-	"https://www.office.com",
-	"https://err.tmall.com",
-	"https://www.hao123.com",
-	"https://www.bing.com",
-	"https://imgur.com"*/
-];
+console.log(urlArray);
 
-jsonData.forEach(function(url){
+    if(jsonData[key] == 'score'){
+        console.log("yandÄ±k");
+    }
+
+}
+
+urlArray.forEach(function(url){
 	process(url);
 });
 
@@ -136,8 +119,37 @@ function process(url){
             //return console.log(url + ' ' + calculateVcs(tlc, wordCount, imageCount));
              //console.log(url + ' ' + scoresDict[url]);
             //console.log(JSON.stringify(scoresDict));
-            scoresDict[url] = calculateVcs(tlc, wordCount, imageCount);
-            var jsonDict = JSON.stringify(scoresDict,null, 2);
+            for(const key in jsonData){
+                if(url==key)
+                    jsonData[key].score = calculateVcs(tlc, wordCount, imageCount);
+                else{
+                    for(const nestedKey in jsonData[key]){
+                        if(nestedKey === "score"){
+                            jsonData[nestedKey]++;
+                            //console.log(jsonData[nestedKey]);
+                        }
+                       if(nestedKey == url)
+                            jsonData[key][nestedKey].score = calculateVcs(tlc, wordCount, imageCount);
+                        else{
+                            for(const nestedKey2 in jsonData[key][nestedKey]){
+                                //console.log("Nested Key 2:", nestedKey2);
+                                //console.log("Url: ", url, "NestedKey2: ", nestedKey2);
+                                if(nestedKey2 === "score")
+                                    //jsonData[nestedKey][nestedKey2];
+                                    continue;
+                                else if(nestedKey2 == url){
+                                       jsonData[key][nestedKey][nestedKey2] = calculateVcs(tlc, wordCount, imageCount);
+                                       // console.log("Nested Key 2:", jsonData[key][nestedKey][nestedKey2] );
+                                }
+                              }
+                        }
+                    }
+                }
+
+            }
+            console.log(jsonData);
+//            scoresDict[url] = calculateVcs(tlc, wordCount, imageCount);
+            var jsonDict = JSON.stringify(jsonData,null, 3);
             jsonDictFile(jsonDict);
            /* for(var key in scoresDict) {
                 console.log(key + " : " + scoresDict[key]);}
@@ -146,14 +158,6 @@ function process(url){
 
         .close();
 }
-/*function dicToJson(scoresDict){
-
-    var jsonDict = JSON.stringify(scoresDict);
-
-    for(var key in jsonDict) {
-        console.log(key + " : " + jsonDict[key]);
-    }
-}*/
 
 
 function jsonDictFile(jsonDict){
