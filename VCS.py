@@ -13,6 +13,7 @@ from encode import *
 from decode import *
 import uuid
 import time
+from findOldProject import *
 
 
 config ={
@@ -212,11 +213,14 @@ def projects():
     eror = None
     flag = 0
     allProjects = []
+    allProjectsKeys = []
+    allProjectsDict = {}
     
     if request.method == 'POST' and 'ProjectName' in request.form and 'urlAddress' in request.form and "Depth" in request.form:
         ProjectName = request.form['ProjectName']
         urlAddress = request.form['urlAddress']
         Depth = request.form['Depth']
+        
         
 
         if not urlAddress or not ProjectName or not Depth:
@@ -227,26 +231,32 @@ def projects():
             eror = 'Please enter a valid Depth'
         else:
             
-            jsonData = {}
-            flag = 1
-            runCrawler(urlAddress,int(Depth))
+            if findOld(db,urlAddress, Depth,session["uid"]):
+                return redirect(url_for("projects"))
+            else:
+                jsonData = {}
+                flag = 1
+                runCrawler(urlAddress,int(Depth))
 
-            os.chdir("C:\\Users\\IRPHAN\\Documents\\GitHub\\viscomap\\metu-emine-role-detection-api-ee564a450501")
-            os.system("node vcs-calculator.js")
-            with open('C:\\Users\\IRPHAN\\Documents\\GitHub\\viscomap\\metu-emine-role-detection-api-ee564a450501\\jsonDictionary.json') as f:
-                jsonData = json.load(f)
-            
-            os.chdir("C:\\Users\\IRPHAN\\Documents\\GitHub\\viscomap")
-            Uid = uuid.uuid4().hex
-            encodedJsonData = encodeURL(jsonData,int(Depth))
+                os.chdir("C:\\Users\\IRPHAN\\Documents\\GitHub\\viscomap\\metu-emine-role-detection-api-ee564a450501")
+                os.system("node vcs-calculator.js")
+                with open('C:\\Users\\IRPHAN\\Documents\\GitHub\\viscomap\\metu-emine-role-detection-api-ee564a450501\\jsonDictionary.json') as f:
+                    jsonData = json.load(f)
+                
+                os.chdir("C:\\Users\\IRPHAN\\Documents\\GitHub\\viscomap")
+                
+                Uid = uuid.uuid4().hex
+                jsonData["Depth"] = int(Depth)
+                encodedJsonData = encodeURL(jsonData,int(Depth))
 
-            urlUid = urllib.parse.quote(urlAddress, safe='').replace(".", "%2E%2E")
-            print(type(urlUid))
-            print("urladress",urlUid)
-            db.child("projects").child(Uid).set(encodedJsonData)
-            db.child("users").child(session["uid"]).child("projects").child(Uid).set(urlUid)
+                urlUid = urllib.parse.quote(urlAddress, safe='').replace(".", "%2E%2E")
+                print(type(urlUid))
+                print("urladress",urlUid)
+                db.child("projects").child(Uid).set(encodedJsonData)
+                db.child("users").child(session["uid"]).child("projects").child(Uid).set(urlUid)
+
         return redirect(url_for("projects"))
-
+        
 
         """
             modifedJsonData =  db.child("projects").child(Uid).get()
@@ -262,26 +272,43 @@ def projects():
         """
     
     Projects = db.child("users").child(session["uid"]).child("projects").get()
-    #print(Projects.val())
-    for project in Projects.val():
-        pro = db.child("projects").child(project).get()
-        print(json.dumps(pro.val(), indent=4))
-        print("\n\n")
-        decodedJsonData = decodeURL(pro.val(),int(Depth))
-        print("\n\n")
-        print(json.dumps(decodedJsonData, indent=4))
+
+    for project in Projects.each():
+
+        #print(json.dumps(pro.val(), indent=4))
+        
+        decodedJsonData = urllib.parse.unquote(project.val()).replace("%2E","." )
+
+        #print(json.dumps(decodedJsonData, indent=4))
         allProjects.append(decodedJsonData)
+        allProjectsKeys.append(project.key())
+        allProjectsDict[project.key()] = decodedJsonData
+        
         #print("\n\n")
     #print(allProjects[0])
+    return render_template('projects.html',auth = auth, allProjectsDict = allProjectsDict, eror = eror,Depth = Depth)
 
-    return render_template('projects.html',auth = auth, allProjects = allProjects, eror = eror,Depth = Depth)
+    #return render_template('projects.html',auth = auth, allProjectsDict = allProjectsDict, eror = eror,Depth = Depth)
+
     
     
-@app.route("/<string:id>", methods=['GET', 'POST'])
+    
+@app.route("/<string:uid>", methods=['GET', 'POST'])
 @login_required
-def project(id):
+def project(uid):
+    project = db.child("projects").child(uid).get()
+    Depth = project.val()["Depth"]
     
-    pass
+    decodedProject = decodeURL(project.val(),Depth)
+
+    with open('C:\\Users\\IRPHAN\\Documents\\GitHub\\viscomap\\static\\ProjectFile.json','w') as f:
+        json.dump(decodedProject, f, indent=4)
+    return render_template('project.html', headings = headings ,project =decodedProject, auth = auth, Depth = int(Depth))
+
+@app.route('/visualization', methods=['GET', 'POST'])
+@login_required
+def visualization():
+    return render_template('visualization.html',auth = auth)
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))

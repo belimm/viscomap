@@ -9,130 +9,128 @@
 
 
 <div class="container emp-profile">
-    <table id="DT_load" class="table table-bordered table-primary table-striped" style="text-align:center;background:rgb(64, 102,200);">
-
-            <tr>
-
-                <tr>
-                    <td class ="myProjectDetail" >
-                        Project Name:
-                    </td>
-                    <td class = "myProjectDetail">
-
-                        {{project.project_name}}
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class = "myProjectDetail">
-                        URL Address:
-                    </td>
-                    <td class = "myProjectDetail">
-                        <a href="{{project.url_address}}" target="_blank">{{project.url_address}}</a>
-
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class ="myProjectDetail">
-                        Complexity Score:
-                    </td>
-                    <td class = "myProjectDetail">
-                        {{project.complexty_score}}
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class = "myProjectDetail">
-                        Creation Date:
-                    </td>
-                    <td class = "myProjectDetail">
-                        {{project.creation_date}}
-                    </td>
-                </tr>
-
-            </tr>
-    </table>
-
-    <br>
-
     
+    <table id="DT_load" class="table table-striped" >
+        <tbody>
+            
+            
 
 
-    <div class="d-flex flex-nowrap resultDiv">
 
-        <div class="mr-auto p-2" style=" margin: 80px auto 100px; display: block;">
+        {% if Depth == 1 %}
+            {% for key in project.keys() %}
+                {% if (key != "score") and (key != "Depth") %}
+                <tr>
 
-            <div class="container emp-profile">
-                <table id="projectTable" class = "table">
+                    {{key}}
 
-                    <div class="col-md-7">
-
-                        <thead>
-                            <tr class = "table_header">
-                                <th>ID</th>
-                                    {% for header in headings %}
-                                    <th class = "table_cell">{{header}}</th>
-                                {% endfor %}
-                        </thead>
+                </tr>
+                
+                    {% for value in project[key] %}
                         
-                        <tbody>
-                        </tr class = "table_row">
-                                {% for index in df.index %}
+                        <tr>
+                            {% if (key != "score") and (key != "Depth") %}
+                                <td style = "color:red; padding-left: 50px;">
+                                    {{value}}
+                                </td>
+                                <td>
+                                    {{project[key][value]}}
+                                </td>
+                            {% endif %}
+                        </tr>
+
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+
+        {% else %}
+            {% for key in project.keys() %}
+                    {% if (key != "score") and (key != "Depth") %}
+                    <tr>
+                        {{key}}
+                    </tr>
+                        {% for key2 in project[key].keys() %}
+                        <tr>
+                            {% if (key2 != "score") and (key2 != "Depth") %}
+                                <td style = "color:red; padding-left: 50px;">
+                                    {{key2}}
+                                </td>
+
+                                {% for key3 in project[key][key2].keys() %}
                                     <tr>
-                                        <td class = "table_cell">
-                                            {{index+1}}
-                                        </td>
-                                        <td class = "table_cell">
-                                            <a href= "{{df['subsite_url'][index]}}">
-                                            {{df["subsite_url"][index]}}
-                                            </a>
-                                        </td>
-
-                                        {% if df["complexity_range"][index] == "Low"%}
-                                            <td class = "table_cell" style="color: green;" >{{df["complexity_score"][index]}} </td>
-                                            <td class = "table_cell" style="color: green;">{{df["complexity_range"][index]}} </td>
-                                        {% endif %}
-
-                                        {% if df["complexity_range"][index] == "Medium"%}
-                                            <td class = "table_cell" style="color: yellow;" >{{df["complexity_score"][index]}} </td>
-                                            <td class = "table_cell" style="color: yellow;">{{df["complexity_range"][index]}} </td>
-                                        {% endif %}
-
-                                        {% if df["complexity_range"][index] == "High"%}
-                                            <td class = "table_cell" style="color: orange;" >{{df["complexity_score"][index]}} </td>
-                                            <td class = "table_cell" style="color: orange;">{{df["complexity_range"][index]}} </td>
-                                        {% endif %}
-
-                                        {% if df["complexity_range"][index] == "Very High"%}
-                                            <td class = "table_cell" style="color: red;" >{{df["complexity_score"][index]}} </td>
-                                        <td class = "table_cell" style="color: red;">{{df["complexity_range"][index]}} </td>
+                                        {% if (key3 != "score") and (key3 != "Depth") %}
+                                            <td  style = "color:blue; padding-left: 100px;">
+                                                {{key3}}
+                                            </td>
+                                            <td>
+                                                {{project[key][key2][key3]}}
+                                            </td>
                                         {% endif %}
                                     </tr>
                                 {% endfor %}
-                            </tr>
-                        </tbody>
-                    </div>
-                </table>
-            </div>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
             
-            </div>
-        </div>
-        
-        <div class="ml-auto p-2" id = "mapImgDiv">
-            <h4>{{project.project_name}}</h4>
+        {% endif %}
+            
+            
 
-            <div style="text-align: center; margin: 20px auto 80px; display: block;" >
-                <img src = "static/images/{{project.project_name}}.png" title = "{{project.project_name}}" alt = "{{project.project_name}}"/>
-            </div>
-        </div>
-    </div>
-    
-    
+
+
+        </tbody>
+    </table>
+
+
 </div>
+<br><br>
+<div  class="section text-center" >
+    <button  type="button" class="btn_login" data-bs-toggle="modal" onclick="window.location.href='{{ url_for( 'visualization' ) }}'">Show Visual</button>
+    
+    <button  type="button" class="btn_login" onclick = "downloadJSON()" >Download As Json File</button>
+</div>
+<br><br><br><br>
+<script>
+
+    function readTextFile(file, callback) {
+          var rawFile = new XMLHttpRequest();
+          rawFile.overrideMimeType("application/json");
+          rawFile.open("GET", file, true);
+          rawFile.onreadystatechange = function() {
+              if (rawFile.readyState === 4 && rawFile.status == "200") {
+                  callback(rawFile.responseText);
+              }
+          }
+          rawFile.send(null);
+      }
+
+      function downloadJSON(){
+          console.log("deneme")
+          readTextFile("static/ProjectFile.json", function(text){
+              scores = JSON.parse(text);
+              console.log(scores);
+              // onDownload();
+              onDownload(scores);
+          });
+      }
+    //usage:
 
 
+      function download(content, fileName, contentType) {
+          const a = document.createElement("a");
+          const file = new Blob([content], { type: contentType });
+          a.href = URL.createObjectURL(file);
+          a.download = fileName;
+          a.click();
+      }
 
+      function onDownload(scores){
+      download(JSON.stringify(scores,null,2), "complexityCalculatedList.json", "\t");
+      }
+
+  </script>
 {% endblock %}
 {% block main %}
 {% endblock %}

@@ -107,17 +107,20 @@
 
 
 
-                        {% for project in allProjects %}
-                                {% for key in project.keys() %}
-                                    <tr>
-                                        <td><a href = "/{{key}}">{{key}}</a></td>
-                                        <td>{% if key == "score"%}
-                                                {{project[key]}}
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                {% endfor %} 
-                        {% endfor %}
+                    {% for project in allProjectsDict.items() %}
+                        <tr>
+                            <td>
+                                <a href = "/{{project[0]}}">{{ project[1] }}</a>
+                            </td>
+                            <td>
+                                <p>1</p>
+                            </td>
+                            <td>
+                                <button  style="background-color: rgb(153, 28, 28);" type="button" class="btn_login" data-bs-toggle="modal" data-bs-target="#deleteProject"  style="width:50px;" >Delete</button>
+                            </td>
+                        </tr>
+
+                    {% endfor %}
                         
                         
 
