@@ -270,25 +270,32 @@ def projects():
             #print(urllib.parse.unquote(urlAddress).replace("%2E%2E", "."))   
 
         """
+    userKeys = db.child("users").child(session["uid"]).get()
+    try:
+        if userKeys.val()["projects"]:
+            Projects = db.child("users").child(session["uid"]).child("projects").get()
+
+            for project in Projects.each():
+
+            #print(json.dumps(pro.val(), indent=4))
+            
+                decodedJsonData = urllib.parse.unquote(project.val()).replace("%2E","." )
+
+                #print(json.dumps(decodedJsonData, indent=4))
+                allProjects.append(decodedJsonData)
+                allProjectsKeys.append(project.key())
+                allProjectsDict[project.key()] = decodedJsonData
+        return render_template('projects.html',auth = auth, allProjectsDict = allProjectsDict, eror = eror,Depth = Depth)
+    except:
+        return render_template('projects.html',auth = auth, allProjectsDict = allProjectsDict, eror = eror,Depth = Depth)
+    """
     
-    Projects = db.child("users").child(session["uid"]).child("projects").get()
-
-    for project in Projects.each():
-
-        #print(json.dumps(pro.val(), indent=4))
-        
-        decodedJsonData = urllib.parse.unquote(project.val()).replace("%2E","." )
-
-        #print(json.dumps(decodedJsonData, indent=4))
-        allProjects.append(decodedJsonData)
-        allProjectsKeys.append(project.key())
-        allProjectsDict[project.key()] = decodedJsonData
         
         #print("\n\n")
     #print(allProjects[0])
     return render_template('projects.html',auth = auth, allProjectsDict = allProjectsDict, eror = eror,Depth = Depth)
-
-    #return render_template('projects.html',auth = auth, allProjectsDict = allProjectsDict, eror = eror,Depth = Depth)
+    """
+    return render_template('projects.html',auth = auth, allProjectsDict = allProjectsDict, eror = eror,Depth = Depth)
 
     
     

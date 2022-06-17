@@ -1,17 +1,18 @@
 {
-   "https://www.google.com": {
-      "score": 0.33,
-      "https://www.google.com/intl/en/about.html": 0,
-      "https://www.google.com/preferences": 0,
-      "https://www.google.com/intl/en/ads/": 0,
-      "https://www.google.com/setprefdomain": 0,
-      "https://www.google.com/intl/en/policies/privacy/": 0,
-      "https://www.google.com/intl/en/policies/terms/": 0,
-      "https://www.google.com.cy/intl/en/about/products": 0,
-      "https://www.google.com/setprefs": 0,
-      "https://www.google.com/advanced_search": 0,
-      "http://www.google.com.cy/history/optout": 0,
-      "https://www.google.com.cy/imghp": 0
+   "https://www.youtube.com": {
+      "score": 0.434,
+      "https://www.youtube.com/about/policies/": 0,
+      "https://www.youtube.com/ads/": 0,
+      "https://www.youtube.com/howyoutubeworks": 0,
+      "https://www.youtube.com/new": 0,
+      "https://www.youtube.com/about/press/": 0,
+      "https://www.youtube.com/about/": 0,
+      "https://www.youtube.com/": 0,
+      "https://www.youtube.com/creators/": 0,
+      "https://www.youtube.com/t/privacy": 0,
+      "https://www.youtube.com/t/terms": 0,
+      "https://www.youtube.com/about/copyright/": 0,
+      "https://www.youtube.com/t/contact_us/": 0
    },
    "score": null
 }
