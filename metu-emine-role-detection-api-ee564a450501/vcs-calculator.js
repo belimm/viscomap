@@ -162,7 +162,7 @@ function process(url){
 
 function jsonDictFile(jsonDict){
     const fs = require('fs');
-    fs.writeFileSync('jsonDictionary.json', jsonDict);
+    fs.writeFileSync('C:\\Users\\IRPHAN\\Documents\\GitHub\\viscomap\\static\\ProjectFile.json', jsonDict);
 }
 
 function calculateVcs(block, wordCount, imageCount){
@@ -172,5 +172,5 @@ function calculateVcs(block, wordCount, imageCount){
 		return 10.0;
 	}
 
-	return vcs;
+	return vcs.toFixed(2);
 }

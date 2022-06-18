@@ -12,8 +12,8 @@ import urllib.parse
 from encode import *
 from decode import *
 import uuid
-import time
 from findOldProject import *
+from configurationPath import path
 
 
 config ={
@@ -26,6 +26,7 @@ config ={
     "appId": "1:534515162455:web:33b03117f1816b88603212",
     "measurementId": "G-1ZMCBC6ZBD"
 }
+
 firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
 db = firebase.database()
@@ -212,6 +213,7 @@ def projects():
     Depth = 1
     eror = None
     flag = 0
+    delt = "delete"
     allProjects = []
     allProjectsKeys = []
     allProjectsDict = {}
@@ -238,12 +240,13 @@ def projects():
                 flag = 1
                 runCrawler(urlAddress,int(Depth))
 
-                os.chdir("C:\\Users\\IRPHAN\\Documents\\GitHub\\viscomap\\metu-emine-role-detection-api-ee564a450501")
+                os.chdir(os.path.join(path, "metu-emine-role-detection-api-ee564a450501"))
                 os.system("node vcs-calculator.js")
-                with open('C:\\Users\\IRPHAN\\Documents\\GitHub\\viscomap\\metu-emine-role-detection-api-ee564a450501\\jsonDictionary.json') as f:
+                
+                with open(os.path.join(os.path.join(path,"static"),"ProjectFile.json")) as f:
                     jsonData = json.load(f)
                 
-                os.chdir("C:\\Users\\IRPHAN\\Documents\\GitHub\\viscomap")
+                os.chdir(path)
                 
                 Uid = uuid.uuid4().hex
                 jsonData["Depth"] = int(Depth)
@@ -257,50 +260,24 @@ def projects():
 
         return redirect(url_for("projects"))
         
-
-        """
-            modifedJsonData =  db.child("projects").child(Uid).get()
-            print(json.dumps(modifedJsonData.val(), indent=4))
-            decodedJsonData = decodeURL(modifedJsonData.val(),int(Depth))
-            print("\n\n\n")
-            print(json.dumps(decodedJsonData, indent=4))
-            
-            #db.child("projects").child(urlAddress).set(jsonData)
-            #print(urllib.parse.quote(urlAddress, safe='').replace(".", "%2E%2E"))
-            #print(urllib.parse.unquote(urlAddress).replace("%2E%2E", "."))   
-
-        """
     userKeys = db.child("users").child(session["uid"]).get()
     try:
         if userKeys.val()["projects"]:
             Projects = db.child("users").child(session["uid"]).child("projects").get()
 
-            for project in Projects.each():
-
-            #print(json.dumps(pro.val(), indent=4))
-            
+            for project in Projects.each():            
                 decodedJsonData = urllib.parse.unquote(project.val()).replace("%2E","." )
 
-                #print(json.dumps(decodedJsonData, indent=4))
                 allProjects.append(decodedJsonData)
                 allProjectsKeys.append(project.key())
                 allProjectsDict[project.key()] = decodedJsonData
-        return render_template('projects.html',auth = auth, allProjectsDict = allProjectsDict, eror = eror,Depth = Depth)
+        return render_template('projects.html',auth = auth, allProjectsDict = allProjectsDict, eror = eror,Depth = Depth, delete = delt)
     except:
-        return render_template('projects.html',auth = auth, allProjectsDict = allProjectsDict, eror = eror,Depth = Depth)
-    """
-    
-        
-        #print("\n\n")
-    #print(allProjects[0])
-    return render_template('projects.html',auth = auth, allProjectsDict = allProjectsDict, eror = eror,Depth = Depth)
-    """
-    return render_template('projects.html',auth = auth, allProjectsDict = allProjectsDict, eror = eror,Depth = Depth)
-
+        return render_template('projects.html',auth = auth, allProjectsDict = allProjectsDict, eror = eror,Depth = Depth,delete = delt)
+  
     
     
-    
-@app.route("/<string:uid>", methods=['GET', 'POST'])
+@app.route("/<string:uid>" , methods=['GET', 'POST'])
 @login_required
 def project(uid):
     project = db.child("projects").child(uid).get()
@@ -308,9 +285,16 @@ def project(uid):
     
     decodedProject = decodeURL(project.val(),Depth)
 
-    with open('C:\\Users\\IRPHAN\\Documents\\GitHub\\viscomap\\static\\ProjectFile.json','w') as f:
+    with open('static/ProjectFile.json','w') as f:
         json.dump(decodedProject, f, indent=4)
     return render_template('project.html', headings = headings ,project =decodedProject, auth = auth, Depth = int(Depth))
+
+@app.route("/delete/<string:uid>" , methods=['GET', 'POST'])
+@login_required
+def deleteProject(uid):
+    db.child("users").child(session["uid"]).child("projects").child(uid).remove()
+
+    return redirect(url_for("projects"))
 
 @app.route('/visualization', methods=['GET', 'POST'])
 @login_required

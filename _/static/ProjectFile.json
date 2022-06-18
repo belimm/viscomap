@@ -1,0 +1,16 @@
+{
+    "Depth": 2,
+    "http://www.elginakpinar.com/": {
+        "score": "7.22",
+        "http://www.elginakpinar.com/doi/proceedings/10.1145/2745555": {
+            "score": "0.45",
+            "http://www.elginakpinar.com/": 0,
+            "http://www.elginakpinar.com/toc/csur/2021/53/3": "0.45"
+        },
+        "http://www.elginakpinar.com/toc/csur/2021/53/3": {
+            "score": "0.45",
+            "http://www.elginakpinar.com/": 0,
+            "http://www.elginakpinar.com/doi/proceedings/10.1145/2745555": "0.45"
+        }
+    }
+}

@@ -1,5 +1,5 @@
-
 import urllib.parse
+
 def findOld(db,urlAddress,Depth,session):
     alreadyExist = 0
     counter = 0

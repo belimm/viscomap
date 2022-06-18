@@ -48,7 +48,7 @@
                 <div class="modal-content">
                     <div class="section" id = "createProjectSection"></div>
                         <div class="section text-center">
-                            <form action="{{ url_for('projects') }}" method="POST">
+                            <form action="{{ url_for('deleteProject', uid = 'selam') }}" method="POST">
 
                             <span> Are you sure that you are going to delete project? {{datas}}</span>
 
@@ -116,7 +116,7 @@
                                 <p>1</p>
                             </td>
                             <td>
-                                <button  style="background-color: rgb(153, 28, 28);" type="button" class="btn_login" data-bs-toggle="modal" data-bs-target="#deleteProject"  style="width:50px;" >Delete</button>
+                                <a href = " {{ url_for('deleteProject', uid = project[0]) }}" style="background-color: rgb(153, 28, 28);" class="btn_login"  style="width:50px;" >Delete</a>
                             </td>
                         </tr>
 
@@ -130,6 +130,7 @@
                 </table>
 
                 <br><br>
+                
                 <div  class="section text-center" >
                     <button  type="button" class="btn_login" data-bs-toggle="modal" data-bs-target="#createProject">Create New Project</button>
                 </div>

@@ -1,52 +1,7 @@
 var scores={};
 
 function draw(){
-  /*
-  
- }C:\Users\DELL\Desktop\ViscoMap\viscomap-main\metu-emine-role-detection-api-ee564a450501\jsonDictionary.json
-*/
-/*
-var fs = require('fs'),
-    config = JSON.parse(fs.readFileSync('./config.json', 'utf8')),
-	pageSegmenter = require('./page-segmenter'),
-    Horseman = require('node-horseman');*/
-
-//const scores= require("C:\\Users\\DELL\\Desktop\\ViscoMap\\viscomap-main\\metu-emine-role-detection-api-ee564a450501\\jsonDictionary.json");
-/*var scores={};
-fetch("C:\\Users\\DELL\\Desktop\\ViscoMap\\viscomap-main\\metu-emine-role-detection-api-ee564a450501\\jsonDictionary.json")
-.then(mockResponses => {
-   return mockResponses.json();
-})
-.then(scores=data);*/
-
-//xobj.open('GET', 'C:/Users/DELL/Desktop/ViscoMap/viscomap-main/metu-emine-role-detection-api-ee564a450501/jsonDictionary.json', true); // Replace 'my_data' with the path to your file
-/*  var scores={};
-  init(scores);
-  function loadJSON(callback) {
-      var xobj = new XMLHttpRequest();
-      xobj.overrideMimeType("application/json");
-      xobj.open('GET', 'C:/Users/DELL/Desktop/ViscoMap/viscomap-main/metu-emine-role-detection-api-ee564a450501/jsonDictionary.json', true); // Replace 'my_data' with the path to your file
-      xobj.onreadystatechange = function () {
-      if (xobj.readyState == 4 && xobj.status == "200"){
-              // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-          callback(xobj.responseText);
-      }
-      };
-      
-      xobj.send(null);
-      //C:\Users\DELL\Desktop\ViscoMap\viscomap-main\static\script.js
-  }
-  function init(scores) {
-    
-    loadJSON(function(response) {
-    // Parse JSON string into object
-      scores = JSON.parse(response);
-      console.log(JSON.parse(response));
-    });
-  }*/
-
-
-        
+ 
       function readTextFile(file, callback) {
         var rawFile = new XMLHttpRequest();
         rawFile.overrideMimeType("application/json");
@@ -60,7 +15,7 @@ fetch("C:\\Users\\DELL\\Desktop\\ViscoMap\\viscomap-main\\metu-emine-role-detect
         
       }
 
-      //usage:
+      
       scores = readTextFile("static/ProjectFile.json", function(text){
         scores = JSON.parse(text);
         //console.log("PARSED TEXT",JSON.parse(text));
@@ -73,28 +28,7 @@ fetch("C:\\Users\\DELL\\Desktop\\ViscoMap\\viscomap-main\\metu-emine-role-detect
         var j = -1,colour;
         const scoresArray=[];
 
-        /*
-        function scoring(){
-            var k = 0;
-            for(var key in tcores){
-                if(k!=i){
-                    k++;
-                    continue;
-                }
-                else{
-                    if(tcores[key] <= 3)
-                        colour = "green";
-                    else if(3 < tcores[key]<= 7)
-                        colour = "yellow";
-                    else
-                        colour = "red";
-                    break;
-                }
-            }
-
-            return JSON.stringify(tcores[key]);
-        }
-        */
+      
         function colorize(score){
             if(score <= 3)
               return "green"
@@ -144,44 +78,6 @@ fetch("C:\\Users\\DELL\\Desktop\\ViscoMap\\viscomap-main\\metu-emine-role-detect
             }
             //console.log("other keys: ",key);
         }
-
-
-        /*
-        for (const key in scores) {
-            if (typeof scores[key] === 'object') {
-              //console.log(scores[key][nestedKey].score);
-
-              for (const nestedKey in scores[key]) {
-                console.log(scores[key][nestedKey].score);
-                nodes.add([
-                    {id: ++j, label: JSON.stringify(scores[key][nestedKey].score), color: colour},
-                ]);
-              }
-            }
-            else {
-                //console.log(scores[key][nestedKey].score);
-                nodes.add([
-                    {id: ++j, label: JSON.stringify(scores[key].score), color: colour},
-                ]);
-            }
-        }
-
-        /*
-        for(var key in scores){
-
-            if(scores[key].score <= 3)
-                colour = "green";
-            else if(3 < scores[key].score<= 7)
-                colour = "yellow";
-            else
-                colour = "red";
-            console.log(JSON.stringify(scores[key].score));
-            nodes.add([
-              {id: ++j, label: JSON.stringify(scores[key].score), color: colour},
-            ]);
-            console.log(JSON.stringify(scores[key].score));
-        }*/
-
 
         var edges = [];
 
@@ -274,8 +170,6 @@ fetch("C:\\Users\\DELL\\Desktop\\ViscoMap\\viscomap-main\\metu-emine-role-detect
       
     
       }
-
-
   }
 
 window.addEventListener("load", () => {
