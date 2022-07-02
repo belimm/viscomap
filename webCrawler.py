@@ -107,6 +107,7 @@ def nestedDictionary(crawledList, depth):
         return crawledDict
 
     elif (depth == 1):
+        crawledDict["Depth"]=1
         crawledDict[crawledList[0][0]] = {}
         crawledDict[crawledList[0][0]]["score"] = 0
 
@@ -115,6 +116,7 @@ def nestedDictionary(crawledList, depth):
         return crawledDict
 
     elif (depth == 2):
+        crawledDict["Depth"]=2
         crawledDict[crawledList[0][0]] = {}
         crawledDict[crawledList[0][0]]["score"] = 0
 
@@ -128,13 +130,13 @@ def nestedDictionary(crawledList, depth):
 
 
 def runCrawler(input_url, depth):
-
+    crawledList = []
 
     crawledList = create_list(input_url, depth)
 
     print(crawledList)
 
-
+    nestedDict = {}
     nestedDict = nestedDictionary(crawledList, depth)
     details = json.dumps(nestedDict, indent=5)
     print(nestedDict)

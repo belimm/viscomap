@@ -1,0 +1,82 @@
+{
+    "nodes": [
+        {
+            "id": "http://www.yelizyesilada.com/",
+            "group": 0
+        },
+        {
+            "id": "http://www.yelizyesilada.com",
+            "group": "1.39"
+        },
+        {
+            "id": "http://www.yelizyesilada.com/",
+            "group": "1.39"
+        },
+        {
+            "id": "http://www.yelizyesilada.com/aboutme/",
+            "group": "1.81"
+        },
+        {
+            "id": "http://www.yelizyesilada.com/publications/",
+            "group": 10
+        },
+        {
+            "id": "http://www.yelizyesilada.com/research/",
+            "group": "6.49"
+        },
+        {
+            "id": "http://www.yelizyesilada.com/services/",
+            "group": "5.24"
+        },
+        {
+            "id": "http://www.yelizyesilada.com/teaching/",
+            "group": "2.43"
+        },
+        {
+            "id": "score",
+            "group": "1.39"
+        }
+    ],
+    "links": [
+        {
+            "source": "http://www.yelizyesilada.com/",
+            "target": "http://www.yelizyesilada.com",
+            "value": "1.39"
+        },
+        {
+            "source": "http://www.yelizyesilada.com/",
+            "target": "http://www.yelizyesilada.com/",
+            "value": "1.39"
+        },
+        {
+            "source": "http://www.yelizyesilada.com/",
+            "target": "http://www.yelizyesilada.com/aboutme/",
+            "value": "1.81"
+        },
+        {
+            "source": "http://www.yelizyesilada.com/",
+            "target": "http://www.yelizyesilada.com/publications/",
+            "value": 10
+        },
+        {
+            "source": "http://www.yelizyesilada.com/",
+            "target": "http://www.yelizyesilada.com/research/",
+            "value": "6.49"
+        },
+        {
+            "source": "http://www.yelizyesilada.com/",
+            "target": "http://www.yelizyesilada.com/services/",
+            "value": "5.24"
+        },
+        {
+            "source": "http://www.yelizyesilada.com/",
+            "target": "http://www.yelizyesilada.com/teaching/",
+            "value": "2.43"
+        },
+        {
+            "source": "http://www.yelizyesilada.com/",
+            "target": "score",
+            "value": "1.39"
+        }
+    ]
+}

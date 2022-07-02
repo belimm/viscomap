@@ -1,18 +1,13 @@
 {
-   "https://www.youtube.com": {
-      "score": "0.43",
-      "https://www.youtube.com/creators/": 0,
-      "https://www.youtube.com/t/terms": 0,
-      "https://www.youtube.com/about/": 0,
-      "https://www.youtube.com/": 0,
-      "https://www.youtube.com/t/contact_us/": 0,
-      "https://www.youtube.com/about/press/": 0,
-      "https://www.youtube.com/ads/": 0,
-      "https://www.youtube.com/about/policies/": 0,
-      "https://www.youtube.com/new": 0,
-      "https://www.youtube.com/about/copyright/": 0,
-      "https://www.youtube.com/t/privacy": 0,
-      "https://www.youtube.com/howyoutubeworks": 0
-   },
-   "score": null
+    "Depth": 1,
+    "http://www.yelizyesilada.com/": {
+        "http://www.yelizyesilada.com": "1.39",
+        "http://www.yelizyesilada.com/": "1.39",
+        "http://www.yelizyesilada.com/aboutme/": "1.81",
+        "http://www.yelizyesilada.com/publications/": 10,
+        "http://www.yelizyesilada.com/research/": "6.49",
+        "http://www.yelizyesilada.com/services/": "5.24",
+        "http://www.yelizyesilada.com/teaching/": "2.43",
+        "score": "1.39"
+    }
 }

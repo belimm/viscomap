@@ -3,33 +3,60 @@ var fs = require('fs'),
 	pageSegmenter = require('./page-segmenter'),
     Horseman = require('node-horseman');
 
+const { start } = require('repl');
 var jsonData= require("C:\\Users\\IRPHAN\\Documents\\GitHub\\viscomap\\ourLinks.json");
-
+var rootScore=0;
 const urlArray=[];
-for(const key in jsonData){
-    if(urlArray[0]!=key){
-        urlArray[0]=key;
-    }
-    for(const nestedKey in jsonData[key]){
-        if(nestedKey != "score"){
-            urlArray.push(nestedKey);
-            //console.log("Displaying Depth 1",nestedKey);
+var startTime=Date.now();
+var depthh;
+
+
+if(jsonData["Depth"]==1){
+ depth1URL();
+ depthh=1;
+}
+else{
+    depth2URL();
+    depthh=2;
+}
+
+ function depth1URL(){
+    for(const key in jsonData){
+        if(urlArray[0]!=key && key !== "Depth"){
+            urlArray[0]=key;
         }
-        for(const nestedKey2 in jsonData[key][nestedKey]){
-            if(nestedKey2 != "score"){
-                //console.log("Displaying Depth 2",nestedKey2);
-                urlArray.push(nestedKey2);
+        for(const nestedKey in jsonData[key]){
+            if(nestedKey != "score"){
+                urlArray.push(nestedKey);
+            }
+    }
+ }
+}
+function depth2URL(){
+    for(const key in jsonData){
+
+        if(urlArray[0]!=key && key !== "Depth"){
+            urlArray[0]=key;
+        }
+        for(const nestedKey in jsonData[key]){
+            if(nestedKey != "score"){
+            // console.log("Displaying nestkey1",parseInt(nestedKey));
+                urlArray.push(nestedKey);
+                //console.log("Displaying Depth 1",nestedKey);
+            }
+            for(const nestedKey2 in jsonData[key][nestedKey]){
+                if(nestedKey2 != "score"){
+                // console.log("Displaying nestkey2",nestedKey2);
+                    urlArray.push(nestedKey2);
+                }
             }
         }
     }
+}
 
 console.log(urlArray);
 
-    if(jsonData[key] == 'score'){
-        console.log("yandÄ±k");
-    }
 
-}
 
 urlArray.forEach(function(url){
 	process(url);
@@ -40,7 +67,7 @@ function getFileName(url){
 }
 
 function process(url){
-	console.log(url);
+	//console.log(url);
 
 
 
@@ -70,7 +97,7 @@ function process(url){
 				return horseman.close();
 			}
 		})
-		.wait(5000)
+		.wait(20000)
 		.catch((error) => {
 			console.log(url + ' ' + error);
 			return horseman.close();
@@ -116,47 +143,56 @@ function process(url){
                 return console.log(url + ' ' + errorMessage);
             }
 
-            //return console.log(url + ' ' + calculateVcs(tlc, wordCount, imageCount));
+           // return console.log(url + ' ' + calculateVcs(tlc, wordCount, imageCount));
              //console.log(url + ' ' + scoresDict[url]);
             //console.log(JSON.stringify(scoresDict));
+        })
+        .then(function(){
+         //  console.log("***" + "tlc: " + tlc + "wordCount: "+wordCount+"imageCount: "+imageCount);
             for(const key in jsonData){
-                if(url==key)
+                if(url==key && rootScore == 0){
                     jsonData[key].score = calculateVcs(tlc, wordCount, imageCount);
+                    rootScore=1;
+                }
                 else{
                     for(const nestedKey in jsonData[key]){
                         if(nestedKey === "score"){
-                            jsonData[nestedKey]++;
-                            //console.log(jsonData[nestedKey]);
+                            continue;
                         }
-                       if(nestedKey == url)
-                            jsonData[key][nestedKey].score = calculateVcs(tlc, wordCount, imageCount);
+                        if(depthh==1)
+                            jsonData[key][url] = calculateVcs(tlc, wordCount, imageCount);
                         else{
-                            for(const nestedKey2 in jsonData[key][nestedKey]){
-                                //console.log("Nested Key 2:", nestedKey2);
-                                //console.log("Url: ", url, "NestedKey2: ", nestedKey2);
-                                if(nestedKey2 === "score")
-                                    //jsonData[nestedKey][nestedKey2];
+                            jsonData[key][url].score = calculateVcs(tlc, wordCount, imageCount);
+                        }
+                        for(const nestedKey2 in jsonData[key][nestedKey]){
+                                if(depthh==1)
+                                    break;
+                                if(nestedKey2 === "score")              
                                     continue;
-                                else if(nestedKey2 == url){
-                                       jsonData[key][nestedKey][nestedKey2] = calculateVcs(tlc, wordCount, imageCount);
-                                       // console.log("Nested Key 2:", jsonData[key][nestedKey][nestedKey2] );
+                                else{
+                                    jsonData[key][nestedKey][url] = calculateVcs(tlc, wordCount, imageCount);
                                 }
                               }
                         }
                     }
+                   // console.log(jsonData);
+                    var jsonDict = JSON.stringify(jsonData,null, 3);
+                    jsonDictFile(jsonDict);
                 }
 
-            }
-            console.log(jsonData);
-//            scoresDict[url] = calculateVcs(tlc, wordCount, imageCount);
-            var jsonDict = JSON.stringify(jsonData,null, 3);
-            jsonDictFile(jsonDict);
-           /* for(var key in scoresDict) {
-                console.log(key + " : " + scoresDict[key]);}
-   */
         })
-
         .close();
+}
+
+function scoreCalculator(url,tlc,wordCount,imageCount){
+
+
+    //console.log(jsonData);
+//         scoresDict[url] = calculateVcs(tlc, wordCount, imageCount);
+
+   /* for(var key in scoresDict) {
+        console.log(key + " : " + scoresDict[key]);}
+*/
 }
 
 

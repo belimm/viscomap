@@ -5,64 +5,77 @@
 {% endblock %}
 
 {% block body %}
-<br><br><br>
-
-
-<div class="container emp-profile">
+<br><br>
+<br><br>
+<div  class="section text-center" >
+    <button  type="button" class="btn_login" data-bs-toggle="modal" onclick="window.location.href='{{ url_for( 'visualization' ) }}'">Show Visual 1</button>
+    <button  type="button" class="btn_login" data-bs-toggle="modal" onclick="window.location.href='{{ url_for( 'visual' ) }}'">Show Visual 2</button>
     
-    <table id="DT_load" class="table table-striped" >
-        <tbody>
-            
-            
+    <button  type="button" class="btn_login" onclick = "downloadJSON()" >Download As Json File</button>
+</div>
+<br><br><br><br>
 
+<div class="table-container">
 
-
+<table class="cell">
+    <thead>
+      <tr>
+        <th></th>
+        <th scope="col">URL</th>
+        <th scope="col">SCORE</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody class = "cell-tbody">
         {% if Depth == 1 %}
             {% for key in project.keys() %}
                 {% if (key != "score") and (key != "Depth") %}
-                <tr>
-
-                    {{key}}
-
-                </tr>
-                
-                    {% for value in project[key] %}
+                    <tr>
+                        <td>
+                        <button type="button" id="btnMSb" aria-expanded="false" onclick="toggle(this.id,'#MS01b,#MS02b,#MS03b');" aria-controls="MS01b MS02b MS03b" aria-label="3 more from" aria-labelledby="btnMSb lblMSb">
+                            <svg xmlns="\http://www.w3.org/2000/svg&quot;" viewBox="0 0 80 80" focusable="false"><path d="M70.3 13.8L40 66.3 9.7 13.8z"></path></svg>
+                        </button>
+                        </td>
+                        <td  id="lblMSb">  {{key}}</td>
                         
-                        <tr>
-                            {% if (key != "score") and (key != "Depth") %}
-                                <td style = "color:red; padding-left: 50px;">
-                                    {{value}}
-                                </td>
-                                <td>
-                                    {{project[key][value]}}
-                                </td>
-                            {% endif %}
-                        </tr>
-
+                    </tr>
+                    {% for value in project[key] %}
+                        {% if (key != "score") and (key != "Depth") %}
+                            <tr id="MS01b" class="hidden">
+                                <td></td>
+                                <td><a href = {{value}}>{{value}}</a></td>
+                                <td>{{project[key][value]}}</td>
+                            </tr>
+                        {% endif %}
                     {% endfor %}
                 {% endif %}
             {% endfor %}
-
-        {% else %}
-            {% for key in project.keys() %}
+            {% else %}
+                {% for key in project.keys() %}
                     {% if (key != "score") and (key != "Depth") %}
-                    <tr>
-                        {{key}}
-                    </tr>
-                        {% for key2 in project[key].keys() %}
                         <tr>
+                            <td>{{key}}</td>
+                        </tr>
+                        {% for key2 in project[key].keys() %}
+                            <tr>
                             {% if (key2 != "score") and (key2 != "Depth") %}
-                                <td style = "color:red; padding-left: 50px;">
-                                    {{key2}}
+                                <td>
+                                    <button type="button" id="btnEDENSb" aria-expanded="false" onclick="toggle(this.id,'#EDENS01b,#EDENS02b,#EDENS03b,#EDENS04b,#EDENS05b');" aria-controls="EDENS01b EDENS02b EDENS03b EDENS04b EDENS05b" aria-label="5 more from" aria-labelledby="btnEDENSb lblEDENSb">
+                                        <svg xmlns="\http://www.w3.org/2000/svg&quot;" viewBox="0 0 80 80" focusable="false"><path d="M70.3 13.8L40 66.3 9.7 13.8z"></path></svg>
+                                      </button>
                                 </td>
+                                <td id="lblEDENSb">  {{key2}}</td>
 
                                 {% for key3 in project[key][key2].keys() %}
-                                    <tr>
+                                    <tr id="EDENS01b" class="hidden">
                                         {% if (key3 != "score") and (key3 != "Depth") %}
+                                        <td></td>
                                             <td  style = "color:blue; padding-left: 100px;">
-                                                {{key3}}
+                                                <a href = {{key3}}>{{key3}}</a>
+                                                
                                             </td>
                                             <td>
+
                                                 {{project[key][key2][key3]}}
                                             </td>
                                         {% endif %}
@@ -71,27 +84,21 @@
                             {% endif %}
                         </tr>
                         {% endfor %}
-                    {% endif %}
-                {% endfor %}
+                {% endif %}
+            {% endfor %}
+
+        {% endif %}  
+    </tbody>
+  </table>
+
+</div> 
+  
+  
             
-        {% endif %}
-            
-            
 
-
-
-        </tbody>
-    </table>
-
-
-</div>
 <br><br>
-<div  class="section text-center" >
-    <button  type="button" class="btn_login" data-bs-toggle="modal" onclick="window.location.href='{{ url_for( 'visualization' ) }}'">Show Visual</button>
-    
-    <button  type="button" class="btn_login" onclick = "downloadJSON()" >Download As Json File</button>
-</div>
-<br><br><br><br>
+<br><br>
+
 <script>
 
     function readTextFile(file, callback) {

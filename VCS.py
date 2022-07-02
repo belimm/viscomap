@@ -11,6 +11,7 @@ from functools import wraps
 import urllib.parse
 from encode import *
 from decode import *
+from convertGraph import *
 import uuid
 from findOldProject import *
 from configurationPath import path
@@ -107,7 +108,7 @@ def register():
             session["uid"] = user["localId"]
             
             #Append data to the firebase realtime database
-            data = {"name": name, "email": email, "username": username,"password": password, "projects": []}
+            data = {"name": name, "email": email, "username": username, "projects": []}
             db.child("users").child(session["uid"]).set(data)
             
             #Go to welcome page
@@ -141,41 +142,34 @@ def editProfile():
         password = request.form['password']
         email = request.form['email']
 
-        user = auth.sign_in_with_email_and_password(session["email"], password)
-        
-        print(user)
-        print(session["email"])
-        print(session["uid"])
-        print(session["name"])
-        print(session["username"])
-        print(session["password"])
+        user = db.child("users").child(session["uid"]).get()
 
-     
+    
         if user:
-            if username:
+            if user.val()["username"] == username:
                 editedusername = username
             else:
-                editedusername = user['username']
+                editedusername = user.val()["username"]
             if name:
                 editedname = name
             else:
-                editedname = user['name']
-            if password and (password != user['password']):
+                editedname = user.val()["name"]
+            if password and (password != user.val()["password"]):
                 editedpassword = password
-            elif password == user['password']:
+            elif password == user.val()["password"]:
                 eror["password"] = 'Please enter a new password ! Your password is the same as your old password !'
             else:
-                editedpassword = user['password']
+                editedpassword = user.val()["password"]
             
             if not re.match(r'[^@]+@[^@]+\.[^@]+', email) and email:
-                editedemail = user['email']
+                editedemail = user.val()["email"]
                 eror["email"] = 'Please enter a valid email address !'
             elif email and re.match(r'[^@]+@[^@]+\.[^@]+', email):
                 editedemail = email
             else: 
-                editedemail = user['email']
+                editedemail = user.val()["email"]
             if eror["password"] or eror["email"]:
-                return render_template('editProfile.html', eror = eror)
+                return render_template('editProfile.html', eror = eror,auth = auth)
             else:
                 try:
                     data = {"name": editedname, "email": editedemail, "username": editedusername,"password": editedpassword}
@@ -236,6 +230,7 @@ def projects():
             if findOld(db,urlAddress, Depth,session["uid"]):
                 return redirect(url_for("projects"))
             else:
+                
                 jsonData = {}
                 flag = 1
                 runCrawler(urlAddress,int(Depth))
@@ -249,12 +244,13 @@ def projects():
                 os.chdir(path)
                 
                 Uid = uuid.uuid4().hex
+
                 jsonData["Depth"] = int(Depth)
+
                 encodedJsonData = encodeURL(jsonData,int(Depth))
 
                 urlUid = urllib.parse.quote(urlAddress, safe='').replace(".", "%2E%2E")
-                print(type(urlUid))
-                print("urladress",urlUid)
+
                 db.child("projects").child(Uid).set(encodedJsonData)
                 db.child("users").child(session["uid"]).child("projects").child(Uid).set(urlUid)
 
@@ -287,6 +283,8 @@ def project(uid):
 
     with open('static/ProjectFile.json','w') as f:
         json.dump(decodedProject, f, indent=4)
+
+
     return render_template('project.html', headings = headings ,project =decodedProject, auth = auth, Depth = int(Depth))
 
 @app.route("/delete/<string:uid>" , methods=['GET', 'POST'])
@@ -300,6 +298,12 @@ def deleteProject(uid):
 @login_required
 def visualization():
     return render_template('visualization.html',auth = auth)
+
+@app.route('/visual', methods=['GET', 'POST'])
+@login_required
+def visual():
+    convert()
+    return render_template('vis2.html',auth = auth)
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))

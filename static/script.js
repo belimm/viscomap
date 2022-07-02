@@ -18,11 +18,9 @@ function draw(){
       
       scores = readTextFile("static/ProjectFile.json", function(text){
         scores = JSON.parse(text);
-        //console.log("PARSED TEXT",JSON.parse(text));
-       // console.log("SCORES",scores);
         visualize();
-
       });
+
       function visualize(){
         console.log(scores);
         var j = -1,colour;
@@ -31,7 +29,7 @@ function draw(){
       
         function colorize(score){
             if(score <= 3)
-              return "green"
+              return "#98FB98"
             else if(score <= 7)
               return "yellow"
             else
@@ -39,12 +37,13 @@ function draw(){
         }
 
         var nodes = new vis.DataSet();
-
+        var depthh;
+        depthh = scores["Depth"]
         for(const key in scores){
-            if(j<0){
+            if(j<0 && key != "Depth"){
               //  console.log("first key",scores[key].score);
                 nodes.add([
-                    {id: ++j, label: JSON.stringify(scores[key].score), title: key, color: colorize(scores[key].score)},
+                  {id: ++j, label: parseFloat(scores[key].score).toFixed(2), title: key, color: colorize(scores[key].score)},
                 ])
             }
             for(const nestedKey in scores[key]){
@@ -53,15 +52,17 @@ function draw(){
                 //console.log("Depth 1 Scores: ", scores[key][nestedKey].score);
                 if(scores[key][nestedKey].score !=null){
                   nodes.add([
-                      {id: ++j, label: JSON.stringify(scores[key][nestedKey].score), title: nestedKey ,color: colorize(scores[key][nestedKey].score)},
+                    {id: ++j, label: parseFloat(scores[key][nestedKey].score).toFixed(2), title: nestedKey ,color: colorize(scores[key][nestedKey].score)},
                   ]);
                 }
                 else{
                   nodes.add([
-                      {id: ++j, label: scores[key][nestedKey], title: nestedKey ,color: colorize(scores[key][nestedKey])},
+                    {id: ++j, label: parseFloat(scores[key][nestedKey]).toFixed(2), title: nestedKey ,color: colorize(scores[key][nestedKey])},
                   ])
                 }
                 for(const nestedKey2 in scores[key][nestedKey]){
+                    if(depthh==1)
+                      break;
                     console.log("Nestedkey2:",nestedKey2);
                     /*if(nestedKey2 != "score" && -1 < parseInt(nestedKey2) < 200) 
                       break;*/
@@ -69,7 +70,7 @@ function draw(){
                     if(nestedKey2 === "score")
                         continue;
                     nodes.add([
-                        {id: ++j, label: JSON.stringify(scores[key][nestedKey][nestedKey2]),title: nestedKey2 ,color: colorize(scores[key][nestedKey][nestedKey2])},
+                      {id: ++j, label: parseFloat(scores[key][nestedKey][nestedKey2]).toFixed(2),title: nestedKey2 ,color: colorize(scores[key][nestedKey][nestedKey2])},
                     ]);
 
                   // console.log("J value & value inside nestedkey: ",j, nestedKey2);
@@ -102,6 +103,8 @@ function draw(){
                 edges.push(tempEdges);
                 depthCount++;
                 for(const nestedKey2 in scores[key][nestedKey]){
+                    if(depthh==1)
+                      break;
                     /*if(nestedKey2 != "score" && -1 < parseInt(nestedKey2) < 200)
                       break;*/
                     if(nestedKey2 === "score")
@@ -134,7 +137,14 @@ function draw(){
 
         };
         network = new vis.Network(container, data, options);
-
+        network.on("doubleClick", function (params) {
+          if (params.nodes.length === 1) {
+            var node = nodes.get(params.nodes[0]);
+            if(node.title != null) {
+              window.open(node.title, '_blank');
+            }
+           }
+        });
         // periodically change the layout
         let i = 0;
         setInterval(() => {
